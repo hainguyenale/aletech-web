@@ -2,7 +2,7 @@ import ProjectsPageClient from "./ProjectsPageClient"
 
 export const metadata = {
   title: "Projects | Aletech",
-  description: "Explore our portfolio of successful technology projects and case studies across various industries.",
+  description: "Explore Aletech's portfolio of problem-centered technology solutions, from parking management systems to AI-powered healthcare platforms and blockchain applications.",
 }
 
 export default function ProjectsPage() {

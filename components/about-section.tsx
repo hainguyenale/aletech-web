@@ -5,14 +5,22 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle } from "lucide-react"
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
-export default function AboutSection() {
+interface AboutSectionProps {
+  showLearnMoreButton?: boolean
+}
+
+export default function AboutSection({ showLearnMoreButton = true }: AboutSectionProps) {
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
   })
 
   const controls = useAnimation()
+  const pathname = usePathname()
+  const isAboutPage = pathname === "/about"
 
   useEffect(() => {
     if (inView) {
@@ -41,12 +49,12 @@ export default function AboutSection() {
   }
 
   const features = [
-    "Industry-leading technology expertise",
-    "Dedicated team of certified professionals",
-    "Proven track record of successful projects",
-    "Innovative solutions for complex challenges",
-    "Customer-centric approach to service delivery",
-    "Continuous learning and improvement culture",
+    "Problem-solving expertise with deep diagnostic capabilities",
+    "Collaborative culture with seamless client team integration",
+    "Global experience in US and UK markets",
+    "Secure and high-performance technology solutions",
+    "Continuous client alignment and open communication",
+    "Young, passionate, tech-savvy professional team",
   ]
 
   return (
@@ -177,13 +185,11 @@ export default function AboutSection() {
             </motion.div>
 
             <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold">
-              Pioneering Technology Solutions Since 2010
+              Your Committed Outsourcing Partner
             </motion.h2>
 
             <motion.p variants={itemVariants} className="text-muted-foreground">
-              Aletech is a leading technology company dedicated to helping businesses transform and thrive in the
-              digital era. With over a decade of experience, we've successfully delivered innovative solutions to
-              clients across various industries.
+              Aletech is dedicated to delivering tailored, end-to-end solutions by deeply understanding our clients' unique challenges. Our philosophy is to solve problems at the root, ensuring user-centered outcomes that align with business goals.
             </motion.p>
 
             <motion.div variants={containerVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -195,9 +201,13 @@ export default function AboutSection() {
               ))}
             </motion.div>
 
-            <motion.div variants={itemVariants}>
-              <Button className="bg-primary hover:bg-primary/90 text-white">Learn More About Us</Button>
-            </motion.div>
+            {showLearnMoreButton && (
+              <motion.div variants={itemVariants}>
+                <Link href="/about">
+                  <Button className="bg-primary hover:bg-primary/90 text-white">Learn More About Us</Button>
+                </Link>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </div>

@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import Image from "next/image"
+import Link from "next/link"
 
 export default function HeroSection() {
   const [ref, inView] = useInView({
@@ -92,33 +94,36 @@ export default function HeroSection() {
           >
             <motion.div variants={itemVariants} className="inline-block">
               <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-sm">
-                <span className="text-primary font-medium">Innovative Technology Solutions</span>
+                <span className="text-primary font-medium">Problem-Centered Solutions</span>
               </div>
             </motion.div>
 
             <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-              Transforming Ideas into <span className="text-primary">Digital Reality</span>
+              Solving Complex Challenges with <span className="text-primary">Innovative Technology</span>
             </motion.h1>
 
             <motion.p variants={itemVariants} className="text-lg md:text-xl text-muted-foreground max-w-xl">
-              Aletech delivers cutting-edge technology solutions that drive business growth and innovation in the
-              digital age.
+              Aletech is your committed outsourcing partner, delivering tailored end-to-end solutions by deeply understanding your unique challenges and ensuring user-centered outcomes.
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-white group">
-                <span>Explore Solutions</span>
-                <motion.div
-                  className="ml-2"
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
-                >
-                  <ArrowRight className="h-4 w-4" />
-                </motion.div>
-              </Button>
-              <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary/10">
-                Contact Us
-              </Button>
+              <Link href="/solutions">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 text-white group">
+                  <span>Explore Solutions</span>
+                  <motion.div
+                    className="ml-2"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                  </motion.div>
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary/10">
+                  Contact Us
+                </Button>
+              </Link>
             </motion.div>
 
             <motion.div variants={statsVariants} className="flex items-center gap-8 pt-4">
@@ -129,9 +134,9 @@ export default function HeroSection() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.4, duration: 0.8 }}
                 >
-                  500+
+                  50+
                 </motion.p>
-                <p className="text-sm text-muted-foreground">Projects Completed</p>
+                <p className="text-sm text-muted-foreground">Tech Professionals</p>
               </motion.div>
               <motion.div variants={statItemVariants}>
                 <motion.p
@@ -140,9 +145,9 @@ export default function HeroSection() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.6, duration: 0.8 }}
                 >
-                  98%
+                  7+
                 </motion.p>
-                <p className="text-sm text-muted-foreground">Client Satisfaction</p>
+                <p className="text-sm text-muted-foreground">Years Experience</p>
               </motion.div>
               <motion.div variants={statItemVariants}>
                 <motion.p
@@ -151,9 +156,9 @@ export default function HeroSection() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.8, duration: 0.8 }}
                 >
-                  24/7
+                  100%
                 </motion.p>
-                <p className="text-sm text-muted-foreground">Technical Support</p>
+                <p className="text-sm text-muted-foreground">Problem Solving</p>
               </motion.div>
             </motion.div>
           </motion.div>
@@ -196,12 +201,13 @@ export default function HeroSection() {
               transition={{ duration: 0.3 }}
             >
               <div className="aspect-square w-full relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    className="w-3/4 h-3/4 relative"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 60, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                  >
+                {/* Rotating Rectangles Layer */}
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 60, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                >
+                  <div className="w-3/4 h-3/4 relative">
                     <motion.div
                       className="w-full h-full border-[3px] border-primary rotate-45 absolute"
                       animate={{ rotate: [45, 225, 45] }}
@@ -217,29 +223,29 @@ export default function HeroSection() {
                       animate={{ rotate: [15, 195, 15] }}
                       transition={{ duration: 30, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
                     />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <motion.div
-                        className="w-1/2 h-1/2"
-                        animate={{ rotate: [0, -360] }}
-                        transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                      >
-                        <svg viewBox="0 0 100 100" className="w-full h-full">
-                          <motion.polygon
-                            points="50,0 100,50 50,100 0,50"
-                            fill="#30C8C9"
-                            animate={{
-                              opacity: [1, 0.7, 1],
-                              scale: [1, 0.95, 1],
-                            }}
-                            transition={{
-                              duration: 3,
-                              repeat: Number.POSITIVE_INFINITY,
-                              repeatType: "reverse",
-                            }}
-                          />
-                        </svg>
-                      </motion.div>
-                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Logo Layer */}
+                <div className="absolute inset-0 flex items-center justify-center z-10">
+                  <motion.div
+                    className="w-1/3 h-1/3"
+                    animate={{ 
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{ 
+                      duration: 3,
+                      repeat: Number.POSITIVE_INFINITY,
+                      repeatType: "reverse"
+                    }}
+                  >
+                    <Image
+                      src="/logos/aletech.svg"
+                      alt="Aletech Logo"
+                      width={100}
+                      height={100}
+                      className="w-full h-full object-contain"
+                    />
                   </motion.div>
                 </div>
               </div>

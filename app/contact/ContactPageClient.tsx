@@ -51,36 +51,12 @@ export default function ContactPageClient() {
 
   const offices = [
     {
-      city: "San Francisco",
-      country: "United States",
-      address: "123 Tech Avenue, San Francisco, CA 94105",
-      phone: "+1 (555) 123-4567",
-      email: "sf@aletech.com",
-      hours: "Mon-Fri: 9:00 AM - 6:00 PM PST",
-    },
-    {
-      city: "New York",
-      country: "United States",
-      address: "456 Innovation Street, New York, NY 10001",
-      phone: "+1 (555) 987-6543",
-      email: "nyc@aletech.com",
-      hours: "Mon-Fri: 9:00 AM - 6:00 PM EST",
-    },
-    {
-      city: "London",
-      country: "United Kingdom",
-      address: "78 Tech Lane, London, EC2A 4NE",
-      phone: "+44 20 1234 5678",
-      email: "london@aletech.com",
-      hours: "Mon-Fri: 9:00 AM - 6:00 PM GMT",
-    },
-    {
-      city: "Singapore",
-      country: "Singapore",
-      address: "90 Digital Boulevard, Singapore 018956",
-      phone: "+65 6123 4567",
-      email: "singapore@aletech.com",
-      hours: "Mon-Fri: 9:00 AM - 6:00 PM SGT",
+      city: "Buon Ma Thuot",
+      country: "Vietnam",
+      address: "Eco City Premia, Km7, Tan An ward, Buon Ma Thuot city, Dak Lak province, Vietnam",
+      phone: "(+84) 947058209",
+      email: "ale.contact@aletech.co",
+      hours: "Mon-Fri: 9:00 AM - 6:00 PM ICT",
     },
   ]
 
@@ -108,8 +84,7 @@ export default function ContactPageClient() {
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Business?</h2>
 
                 <p className="text-muted-foreground mb-8 max-w-lg">
-                  Contact us today to discuss how Aletech can help you leverage technology to achieve your business
-                  goals. Our team of experts is ready to provide tailored solutions for your unique challenges.
+                  Contact us today to discuss how Aletech can help solve your complex business challenges with our problem-centered approach and innovative technology solutions.
                 </p>
 
                 <div className="space-y-6">
@@ -122,10 +97,7 @@ export default function ContactPageClient() {
                         Email Us
                       </h3>
                       <p className="text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
-                        info@aletech.com
-                      </p>
-                      <p className="text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
-                        support@aletech.com
+                        ale.contact@aletech.co
                       </p>
                     </div>
                   </motion.div>
@@ -139,10 +111,7 @@ export default function ContactPageClient() {
                         Call Us
                       </h3>
                       <p className="text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
-                        +1 (555) 123-4567
-                      </p>
-                      <p className="text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
-                        +1 (555) 987-6543
+                        (+84) 947058209
                       </p>
                     </div>
                   </motion.div>
@@ -156,10 +125,10 @@ export default function ContactPageClient() {
                         Visit Us
                       </h3>
                       <p className="text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
-                        123 Tech Avenue
+                        Eco City Premia, Km7, Tan An ward
                       </p>
                       <p className="text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
-                        San Francisco, CA 94105
+                        Buon Ma Thuot city, Dak Lak province, Vietnam
                       </p>
                     </div>
                   </motion.div>

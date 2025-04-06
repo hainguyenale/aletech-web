@@ -1,131 +1,62 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
-} from "@/components/ui/carousel"
-import { Card, CardContent } from "@/components/ui/card"
-import { Quote } from "lucide-react"
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-card"
 
 export default function TestimonialsSection() {
   const testimonials = [
     {
       quote:
-        "Aletech transformed our business operations with their innovative software solutions. Their team's expertise and dedication exceeded our expectations.",
-      author: "Sarah Johnson",
-      position: "CTO, Global Enterprises",
-      company: "Global Enterprises",
+        "Aletech's problem-solving expertise and deep diagnostic capabilities helped us transform our legacy parking management system into a scalable microservices architecture.",
+      name: "UK Parking Control",
+      title: "Parking Management, UK Market",
     },
     {
       quote:
-        "The cloud migration services provided by Aletech were seamless and efficient. They helped us modernize our infrastructure while minimizing downtime.",
-      author: "Michael Chen",
-      position: "IT Director",
-      company: "TechNova Inc.",
+        "Their AI-powered dynamic consent generation platform revolutionized our healthcare documentation process, making it fast and compliant for our patients.",
+      name: "Flynotes",
+      title: "Healthcare Tech, Digital Consent Platform",
     },
     {
       quote:
-        "Working with Aletech on our data analytics project was a game-changer. Their insights helped us make data-driven decisions that boosted our revenue.",
-      author: "Emily Rodriguez",
-      position: "Head of Analytics",
-      company: "DataSmart Solutions",
+        "The POD System's ability to handle 10k-20k orders daily with AI-driven analytics has significantly improved our e-commerce operations and customer satisfaction.",
+      name: "POD System",
+      title: "E-commerce & Printing, Print on Demand",
     },
     {
       quote:
-        "Aletech's cybersecurity solutions have given us peace of mind. Their proactive approach to security has protected our sensitive data from threats.",
-      author: "David Wilson",
-      position: "Security Officer",
-      company: "SecureBank Financial",
+        "Mina Chatbot's RAG & LLM integration has transformed our knowledge management, making it easier to process and access unstructured documents.",
+      name: "Mina Chatbot",
+      title: "AI & ERP, Knowledge Management",
     },
     {
       quote:
-        "The mobile app developed by Aletech has received outstanding feedback from our customers. Their attention to detail and user experience is exceptional.",
-      author: "Lisa Thompson",
-      position: "Product Manager",
-      company: "MobileFirst Apps",
+        "Lina text2SQL's natural language querying capabilities have empowered our non-technical team to access and analyze data without writing complex SQL.",
+      name: "Lina text2SQL",
+      title: "AI & ERP, Database Querying",
     },
   ]
 
-  const [api, setApi] = useState<CarouselApi>()
-  const autoplayInterval = useRef<NodeJS.Timeout | null>(null)
-
-  const startAutoplay = () => {
-    if (autoplayInterval.current) {
-      clearInterval(autoplayInterval.current)
-    }
-
-    autoplayInterval.current = setInterval(() => {
-      api?.scrollNext()
-    }, 5000) // Change slide every 5 seconds
-  }
-
-  useEffect(() => {
-    if (!api) return
-
-    startAutoplay()
-
-    return () => {
-      if (autoplayInterval.current) {
-        clearInterval(autoplayInterval.current)
-      }
-    }
-  }, [api])
-
   return (
-    <section id="testimonials" className="py-20 bg-gradient-to-b from-background/95 to-background">
+    <section id="testimonials" className="py-20 bg-gradient-to-b from-background/95 to-background overflow-hidden">
       <div className="container px-4 mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Clients Say</h2>
-          <div className="h-1 w-20 bg-primary mx-auto mb-6"></div>
-          <p className="text-muted-foreground text-lg">
-            Don't just take our word for it. Here's what our clients have to say about working with Aletech.
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Our Success Stories</h2>
+          <div className="h-1 w-16 sm:w-20 bg-primary mx-auto mb-4 sm:mb-6"></div>
+          <p className="text-base sm:text-lg text-muted-foreground">
+            Discover how our innovative solutions have helped clients solve complex business challenges.
           </p>
         </div>
 
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
-          setApi={setApi}
-          onMouseEnter={() => {
-            if (autoplayInterval.current) {
-              clearInterval(autoplayInterval.current)
-            }
-          }}
-          onMouseLeave={() => {
-            startAutoplay()
-          }}
-        >
-          <CarouselContent>
-            {testimonials.map((testimonial, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                <Card className="bg-card/50 border border-border backdrop-blur-sm hover:border-primary/30 transition-all duration-300 h-full">
-                  <CardContent className="p-6 flex flex-col h-full">
-                    <Quote className="h-8 w-8 text-primary/60 mb-4" />
-                    <p className="text-muted-foreground mb-6 flex-grow">"{testimonial.quote}"</p>
-                    <div>
-                      <p className="font-semibold">{testimonial.author}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {testimonial.position}, {testimonial.company}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="flex justify-center mt-8 gap-2">
-            <CarouselPrevious className="static bg-card/50 border border-border hover:bg-primary/20 hover:border-primary/30" />
-            <CarouselNext className="static bg-card/50 border border-border hover:bg-primary/20 hover:border-primary/30" />
-          </div>
-        </Carousel>
+        <div className="relative">
+          <InfiniteMovingCards
+            items={testimonials}
+            direction="left"
+            speed="slow"
+            className="py-4"
+          />
+          <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background to-transparent" />
+        </div>
       </div>
     </section>
   )

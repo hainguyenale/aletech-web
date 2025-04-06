@@ -1,21 +1,32 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ChevronDown } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import ThemeToggle from "@/components/theme-toggle"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isSolutionsDropdownOpen, setIsSolutionsDropdownOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
+  const solutionsDropdownRef = useRef<HTMLDivElement>(null)
 
   const isActive = (path: string) => {
     return pathname === path
   }
+
+  const solutions = [
+    { href: "/solutions/saas", label: "SaaS Solutions" },
+    { href: "/solutions/healthcare", label: "Healthcare Technology" },
+    { href: "/solutions/fintech", label: "Financial Technology" },
+    { href: "/solutions/ecommerce", label: "E-commerce Solutions" },
+    { href: "/solutions/ai", label: "Artificial Intelligence" },
+    { href: "/solutions/database", label: "Database Solutions" },
+  ]
 
   const navLinks = [
     { href: "/about", label: "About Us" },
@@ -34,9 +45,18 @@ export default function Navbar() {
       }
     }
 
+    const handleClickOutside = (event: MouseEvent) => {
+      if (solutionsDropdownRef.current && !solutionsDropdownRef.current.contains(event.target as Node)) {
+        setIsSolutionsDropdownOpen(false)
+      }
+    }
+
     window.addEventListener("scroll", handleScroll)
+    document.addEventListener("mousedown", handleClickOutside)
+    
     return () => {
       window.removeEventListener("scroll", handleScroll)
+      document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [])
 
@@ -52,7 +72,7 @@ export default function Navbar() {
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <motion.div whileHover={{ rotate: 10 }} transition={{ duration: 0.3 }}>
-            <Image src="/images/aletech-logo.png" alt="Aletech Logo" width={40} height={40} className="h-10 w-auto" />
+            <Image src="/logos/aletech.svg" alt="Aletech Logo" width={40} height={40} className="h-10 w-auto" />
           </motion.div>
           <motion.span
             className="text-xl font-bold text-primary"
@@ -89,6 +109,66 @@ export default function Navbar() {
               </Link>
             </motion.div>
           ))}
+          
+          {/* Solutions Dropdown */}
+          <motion.div
+            ref={solutionsDropdownRef}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.6 }}
+            className="relative"
+          >
+            <div className="flex items-center">
+              <Link
+                href="/solutions"
+                className={`text-sm font-medium transition-colors relative ${
+                  pathname === "/solutions" ? "text-primary" : "hover:text-primary"
+                }`}
+              >
+                Solutions
+                {pathname === "/solutions" && (
+                  <motion.div
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
+                    layoutId="navbar-underline"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </Link>
+              <button
+                className="ml-1 text-sm font-medium transition-colors relative flex items-center hover:text-primary"
+                onClick={() => setIsSolutionsDropdownOpen(!isSolutionsDropdownOpen)}
+              >
+                <ChevronDown className={`h-4 w-4 transition-transform ${isSolutionsDropdownOpen ? "rotate-180" : ""}`} />
+              </button>
+            </div>
+            
+            <AnimatePresence>
+              {isSolutionsDropdownOpen && (
+                <motion.div
+                  className="absolute top-full left-0 mt-1 w-64 bg-card border border-border rounded-md shadow-lg z-10"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="py-2">
+                    {solutions.map((solution) => (
+                      <Link
+                        key={solution.href}
+                        href={solution.href}
+                        className={`block px-4 py-2 text-sm transition-colors ${
+                          isActive(solution.href) ? "text-primary bg-primary/10" : "hover:bg-primary/10"
+                        }`}
+                        onClick={() => setIsSolutionsDropdownOpen(false)}
+                      >
+                        {solution.label}
+                      </Link>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </nav>
 
         <div className="hidden md:flex items-center">
@@ -141,8 +221,60 @@ export default function Navbar() {
                     </Link>
                   </motion.div>
                 ))}
+                
+                {/* Mobile Solutions Dropdown */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 0.3 }}
+                >
+                  <div className="flex items-center">
+                    <Link
+                      href="/solutions"
+                      className={`text-sm font-medium transition-colors ${
+                        pathname === "/solutions" ? "text-primary" : "hover:text-primary"
+                      }`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Solutions
+                    </Link>
+                    <button
+                      className="ml-1 text-sm font-medium transition-colors flex items-center hover:text-primary"
+                      onClick={() => setIsSolutionsDropdownOpen(!isSolutionsDropdownOpen)}
+                    >
+                      <ChevronDown className={`h-4 w-4 transition-transform ${isSolutionsDropdownOpen ? "rotate-180" : ""}`} />
+                    </button>
+                  </div>
+                  
+                  <AnimatePresence>
+                    {isSolutionsDropdownOpen && (
+                      <motion.div
+                        className="pl-4 mt-2 space-y-2"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {solutions.map((solution) => (
+                          <Link
+                            key={solution.href}
+                            href={solution.href}
+                            className={`block text-sm transition-colors ${
+                              isActive(solution.href) ? "text-primary" : "hover:text-primary"
+                            }`}
+                            onClick={() => {
+                              setIsSolutionsDropdownOpen(false)
+                              setIsMenuOpen(false)
+                            }}
+                          >
+                            {solution.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               </nav>
-              {/* Mobile menu buttons removed */}
             </div>
           </motion.div>
         )}

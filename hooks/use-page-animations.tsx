@@ -8,39 +8,27 @@ export function usePageAnimations() {
   const controls = useAnimation()
   const pathname = usePathname()
   const [hasAnimated, setHasAnimated] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
-  // Start animations when component mounts
+  // Set isClient to true and start initial animation
   useEffect(() => {
-    // Reset animation state
-    controls.set("hidden")
+    setIsClient(true)
+    // Start initial animation
+    controls.start("visible")
+    setHasAnimated(true)
+  }, [])
 
-    // Start animations with a small delay to ensure proper rendering
-    const timeout = setTimeout(() => {
-      controls.start("visible")
-      setHasAnimated(true)
-    }, 100)
-
-    return () => clearTimeout(timeout)
-  }, [controls, pathname])
-
-  // Listen for page change events
+  // Handle animations on pathname changes
   useEffect(() => {
-    const handlePageChange = () => {
-      // Reset animation state when navigating to a new page
+    if (!isClient) return
+
+    // Only reset and restart animations on pathname changes
+    if (hasAnimated) {
       controls.set("hidden")
-      setHasAnimated(false)
-
-      // Restart animations
-      setTimeout(() => {
-        controls.start("visible")
-        setHasAnimated(true)
-      }, 100)
+      controls.start("visible")
     }
+  }, [controls, pathname, isClient, hasAnimated])
 
-    window.addEventListener("page-changed", handlePageChange)
-    return () => window.removeEventListener("page-changed", handlePageChange)
-  }, [controls])
-
-  return { controls, hasAnimated }
+  return { controls, hasAnimated, isClient }
 }
 

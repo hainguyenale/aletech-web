@@ -67,8 +67,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-1">Email Us</h3>
-                  <p className="text-muted-foreground">info@aletech.com</p>
-                  <p className="text-muted-foreground">support@aletech.com</p>
+                  <p className="text-muted-foreground">ale.contact@aletech.co</p>
                 </div>
               </div>
 
@@ -78,8 +77,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-1">Call Us</h3>
-                  <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                  <p className="text-muted-foreground">+1 (555) 987-6543</p>
+                  <p className="text-muted-foreground">(+84) 947058209</p>
                 </div>
               </div>
 
@@ -89,8 +87,9 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-1">Visit Us</h3>
-                  <p className="text-muted-foreground">123 Tech Avenue</p>
-                  <p className="text-muted-foreground">San Francisco, CA 94105</p>
+                  <p className="text-muted-foreground">Eco City Premia, Km7</p>
+                  <p className="text-muted-foreground">Tan An ward, Buon Ma Thuot city</p>
+                  <p className="text-muted-foreground">Dak Lak province, Vietnam</p>
                 </div>
               </div>
             </div>

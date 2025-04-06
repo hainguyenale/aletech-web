@@ -7,61 +7,68 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { usePageAnimations } from "@/hooks/use-page-animations"
+import { Target, Users, Lightbulb, Globe, Puzzle, HandshakeIcon } from "lucide-react"
 
 export default function AboutPageClient() {
   const { controls, hasAnimated } = usePageAnimations()
 
   const teamMembers = [
     {
-      name: "Sarah Johnson",
+      name: "Ms. Hai Nguyen",
       position: "Chief Executive Officer",
       image: "/placeholder.svg?height=300&width=300",
-      bio: "With over 15 years of experience in the tech industry, Sarah leads Aletech with a vision for innovation and excellence.",
+      bio: "7+ years of experience as PM and BA in automation projects, leading Aletech with a focus on problem-centered solutions.",
     },
     {
-      name: "Michael Chen",
+      name: "Mr. Hieu Ho",
       position: "Chief Technology Officer",
       image: "/placeholder.svg?height=300&width=300",
-      bio: "Michael brings deep technical expertise and a passion for cutting-edge solutions to drive Aletech's technology strategy.",
+      bio: "10+ years as CTO in domestic and international companies, expert in AI, NLP, and Big Data.",
     },
     {
-      name: "Emily Rodriguez",
-      position: "Chief Operating Officer",
+      name: "Mr. Kien Nguyen",
+      position: "Chief AI Officer",
       image: "/placeholder.svg?height=300&width=300",
-      bio: "Emily ensures operational excellence across all departments, with a focus on efficiency and customer satisfaction.",
+      bio: "15+ years of management experience at Viettel, VinGroup, and foreign enterprises. Specialist in AI, NLP, and Big Data.",
     },
     {
-      name: "David Wilson",
-      position: "Chief Financial Officer",
+      name: "Tech-Savvy Team",
+      position: "Development & Operations",
       image: "/placeholder.svg?height=300&width=300",
-      bio: "David oversees Aletech's financial strategy, ensuring sustainable growth and value for our stakeholders.",
+      bio: "50+ young, passionate, tech-savvy professionals driving innovation and delivering exceptional solutions across all our projects.",
     },
   ]
 
   const values = [
     {
-      title: "Innovation",
-      description: "We constantly push the boundaries of what's possible in technology.",
+      title: "Problem-Centered Solutions",
+      description: "We prioritize understanding core challenges and goals to deliver impactful, relevant solutions.",
+      icon: Target,
     },
     {
-      title: "Excellence",
-      description: "We strive for excellence in everything we do, from code to customer service.",
+      title: "Client Collaboration",
+      description: "Continuous alignment and open communication with clients at every project stage.",
+      icon: Users,
     },
     {
-      title: "Integrity",
-      description: "We operate with transparency and honesty in all our business dealings.",
+      title: "Quality and Innovation",
+      description: "We ensure secure, high-performance, and adaptive technology solutions.",
+      icon: Lightbulb,
     },
     {
-      title: "Collaboration",
-      description: "We believe in the power of teamwork and partnership to achieve great results.",
+      title: "Global Experience",
+      description: "Extensive experience working with clients in the US and UK markets.",
+      icon: Globe,
     },
     {
-      title: "Customer Focus",
-      description: "We put our clients' needs at the center of our decision-making process.",
+      title: "Problem-Solving Expertise",
+      description: "Deep diagnostic capabilities for both operational and business challenges.",
+      icon: Puzzle,
     },
     {
-      title: "Sustainability",
-      description: "We're committed to sustainable practices that benefit our planet and society.",
+      title: "Collaborative Culture",
+      description: "We integrate seamlessly with client teams to foster success and adaptability.",
+      icon: HandshakeIcon,
     },
   ]
 
@@ -226,13 +233,11 @@ export default function AboutPageClient() {
               </motion.div>
 
               <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold">
-                Pioneering Technology Solutions Since 2010
+                Your Committed Outsourcing Partner
               </motion.h2>
 
               <motion.p variants={itemVariants} className="text-muted-foreground">
-                Aletech is a leading technology company dedicated to helping businesses transform and thrive in the
-                digital era. With over a decade of experience, we've successfully delivered innovative solutions to
-                clients across various industries.
+                Aletech is dedicated to delivering tailored, end-to-end solutions by deeply understanding our clients' unique challenges. Our philosophy is to solve problems at the root, ensuring user-centered outcomes that align with business goals.
               </motion.p>
 
               <motion.div variants={containerVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -263,10 +268,6 @@ export default function AboutPageClient() {
                     <span className="text-sm text-muted-foreground">{feature.title}</span>
                   </motion.div>
                 ))}
-              </motion.div>
-
-              <motion.div variants={itemVariants}>
-                <Button className="bg-primary hover:bg-primary/90 text-white">Learn More About Us</Button>
               </motion.div>
             </motion.div>
           </div>
@@ -314,11 +315,11 @@ export default function AboutPageClient() {
                   whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(48, 200, 201, 0.2)" }}
                 >
                   <motion.div
-                    className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mb-4"
+                    className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-300"
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.7 }}
                   >
-                    <div className="h-6 w-6 bg-primary rounded-full"></div>
+                    {value.icon && <value.icon className="h-6 w-6 text-primary" />}
                   </motion.div>
                   <h3 className="text-xl font-bold mb-2">{value.title}</h3>
                   <p className="text-muted-foreground">{value.description}</p>
@@ -353,7 +354,7 @@ export default function AboutPageClient() {
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Meet the Leadership Team</h2>
             <p className="text-muted-foreground text-lg">
               Our leadership team brings together decades of experience in technology, business, and innovation to guide
-              Aletech's vision and strategy.
+              Aletech's vision and strategy. Backed by 50+ young, passionate, tech-savvy professionals who drive our success.
             </p>
           </motion.div>
 
@@ -366,23 +367,23 @@ export default function AboutPageClient() {
             {teamMembers.map((member, index) => (
               <motion.div key={index} variants={itemVariants} custom={index}>
                 <motion.div
-                  className="bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden hover:border-primary/30 transition-all duration-300"
+                  className="bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden hover:border-primary/30 transition-all duration-300 h-full flex flex-col"
                   whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(48, 200, 201, 0.2)" }}
                 >
-                  <div className="relative">
+                  <div className="relative aspect-square">
                     <Image
                       src={member.image || "/placeholder.svg"}
                       alt={member.name}
                       width={300}
                       height={300}
-                      className="w-full h-auto"
+                      className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
                   </div>
-                  <div className="p-6">
+                  <div className="p-6 flex flex-col flex-grow">
                     <h3 className="text-xl font-bold mb-1">{member.name}</h3>
                     <p className="text-primary text-sm mb-3">{member.position}</p>
-                    <p className="text-muted-foreground text-sm">{member.bio}</p>
+                    <p className="text-muted-foreground text-sm flex-grow">{member.bio}</p>
                   </div>
                 </motion.div>
               </motion.div>
@@ -420,10 +421,26 @@ export default function AboutPageClient() {
             animate={controls}
           >
             {[
-              { value: "10+", label: "Years of Experience" },
-              { value: "500+", label: "Projects Completed" },
-              { value: "200+", label: "Team Members" },
-              { value: "15+", label: "Countries Served" },
+              { 
+                value: "32+", 
+                label: "Years Combined Experience",
+                description: "Leadership team's combined expertise"
+              },
+              { 
+                value: "7", 
+                label: "Major Products",
+                description: "Successful enterprise solutions"
+              },
+              { 
+                value: "50+", 
+                label: "Tech Professionals",
+                description: "Young and passionate team members"
+              },
+              { 
+                value: "2", 
+                label: "Major Markets",
+                description: "Strong presence in US and UK"
+              },
             ].map((stat, index) => (
               <motion.div key={index} variants={itemVariants} custom={index}>
                 <motion.div
@@ -438,7 +455,8 @@ export default function AboutPageClient() {
                   >
                     {stat.value}
                   </motion.div>
-                  <p className="text-muted-foreground">{stat.label}</p>
+                  <p className="text-muted-foreground font-medium mb-1">{stat.label}</p>
+                  <p className="text-sm text-muted-foreground/80">{stat.description}</p>
                 </motion.div>
               </motion.div>
             ))}

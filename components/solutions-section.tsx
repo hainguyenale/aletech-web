@@ -1,39 +1,28 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Building2, ShoppingBag, Stethoscope, GraduationCap, Landmark, Factory } from "lucide-react"
+import { ArrowRight, Cloud, Stethoscope, Wallet, ShoppingBag, Brain, Database } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Link from "next/link"
+import { motion, AnimatePresence } from "framer-motion"
 
 export default function SolutionsSection() {
-  const industries = [
+  const solutions = [
     {
-      id: "enterprise",
-      icon: <Building2 className="h-5 w-5" />,
-      label: "Enterprise",
-      title: "Enterprise Solutions",
+      id: "saas",
+      icon: <Cloud className="h-5 w-5" />,
+      label: "SaaS",
+      title: "SaaS Solutions",
       description:
-        "Comprehensive technology solutions designed to optimize operations, enhance productivity, and drive growth for large enterprises.",
+        "Expertise in building scalable, multi-tenant SaaS platforms with robust architecture and seamless deployment capabilities.",
       features: [
-        "Enterprise Resource Planning (ERP)",
-        "Customer Relationship Management (CRM)",
-        "Business Intelligence & Analytics",
-        "Digital Transformation Consulting",
+        "Scalable microservices architecture",
+        "Multi-region deployment support",
+        "Zero-downtime migration strategies",
+        "Automated provisioning systems",
+        "Regulatory compliance frameworks",
+        "Usage-based billing integration",
       ],
-      image: "/placeholder.svg?height=400&width=600",
-    },
-    {
-      id: "retail",
-      icon: <ShoppingBag className="h-5 w-5" />,
-      label: "Retail",
-      title: "Retail & E-commerce",
-      description:
-        "Innovative digital solutions that help retailers create seamless shopping experiences across all channels.",
-      features: [
-        "E-commerce Platforms",
-        "Inventory Management Systems",
-        "Point of Sale (POS) Solutions",
-        "Customer Loyalty Programs",
-      ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "images/saas-solution.png",
     },
     {
       id: "healthcare",
@@ -41,130 +30,177 @@ export default function SolutionsSection() {
       label: "Healthcare",
       title: "Healthcare Technology",
       description:
-        "Secure and compliant technology solutions that improve patient care and streamline healthcare operations.",
+        "Advanced healthcare solutions leveraging AI and automation to enhance patient care and streamline medical processes.",
       features: [
-        "Electronic Health Records (EHR)",
-        "Telemedicine Platforms",
-        "Healthcare Analytics",
-        "Medical Device Integration",
+        "AI-powered medical systems",
+        "HIPAA-compliant architectures",
+        "Patient data security",
+        "Clinical workflow automation",
+        "Medical documentation systems",
+        "Healthcare API integrations",
       ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "images/healthcare-solution.png",
     },
     {
-      id: "education",
-      icon: <GraduationCap className="h-5 w-5" />,
-      label: "Education",
-      title: "Education Technology",
+      id: "fintech",
+      icon: <Wallet className="h-5 w-5" />,
+      label: "Fintech",
+      title: "Financial Technology",
       description:
-        "Digital learning solutions that enhance educational experiences and outcomes for students and educators.",
+        "Innovative fintech solutions combining blockchain technology, secure payment systems, and advanced financial services.",
       features: [
-        "Learning Management Systems",
-        "Virtual Classrooms",
-        "Educational Content Development",
-        "Student Information Systems",
+        "Blockchain implementation",
+        "Secure payment processing",
+        "Digital wallet systems",
+        "Financial data analytics",
+        "Regulatory compliance",
+        "Cross-border transactions",
       ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "images/fintech-solution.png",
     },
     {
-      id: "finance",
-      icon: <Landmark className="h-5 w-5" />,
-      label: "Finance",
-      title: "Financial Services",
+      id: "ecommerce",
+      icon: <ShoppingBag className="h-5 w-5" />,
+      label: "E-commerce",
+      title: "E-commerce Solutions",
       description:
-        "Secure and innovative technology solutions for banks, insurance companies, and financial institutions.",
+        "Comprehensive e-commerce solutions with high-volume processing capabilities and intelligent business analytics.",
       features: [
-        "Digital Banking Platforms",
-        "Payment Processing Systems",
-        "Fraud Detection & Prevention",
-        "Regulatory Compliance Solutions",
+        "High-volume order processing",
+        "Inventory management systems",
+        "Multi-channel integration",
+        "Real-time analytics",
+        "Supply chain optimization",
+        "Customer behavior analysis",
       ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "images/ecommerce-solution.png",
     },
     {
-      id: "manufacturing",
-      icon: <Factory className="h-5 w-5" />,
-      label: "Manufacturing",
-      title: "Manufacturing Solutions",
+      id: "ai",
+      icon: <Brain className="h-5 w-5" />,
+      label: "AI",
+      title: "Artificial Intelligence",
       description:
-        "Technology solutions that optimize production processes and supply chain management for manufacturers.",
+        "Cutting-edge AI solutions utilizing advanced machine learning, natural language processing, and intelligent automation.",
       features: [
-        "Industrial IoT Solutions",
-        "Supply Chain Management",
-        "Production Planning & Scheduling",
-        "Quality Control Systems",
+        "Machine Learning models",
+        "Natural Language Processing",
+        "Computer Vision systems",
+        "Predictive analytics",
+        "AI-powered automation",
+        "Custom AI model training",
       ],
-      image: "/placeholder.svg?height=400&width=600",
+      image: "images/ai-solution.png",
+    },
+    {
+      id: "database",
+      icon: <Database className="h-5 w-5" />,
+      label: "Database",
+      title: "Database Solutions",
+      description:
+        "Advanced database solutions with intelligent querying, data processing, and enterprise-grade security features.",
+      features: [
+        "Intelligent query systems",
+        "Big Data processing",
+        "Data warehousing",
+        "Database optimization",
+        "Data security & compliance",
+        "Real-time data analytics",
+      ],
+      image: "images/database-solution.png",
     },
   ]
 
   return (
-    <section id="solutions" className="py-20 bg-background">
-      <div className="container px-4 mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Industry Solutions</h2>
-          <div className="h-1 w-20 bg-primary mx-auto mb-6"></div>
-          <p className="text-muted-foreground text-lg">
-            We deliver specialized technology solutions tailored to the unique needs of various industries.
+    <section id="solutions" className="py-12 sm:py-16 md:py-20 bg-background">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Our Solutions</h2>
+          <div className="h-1 w-16 sm:w-20 bg-primary mx-auto mb-4 sm:mb-6"></div>
+          <p className="text-base sm:text-lg text-muted-foreground">
+            Leveraging cutting-edge technology to deliver comprehensive solutions across multiple industries.
           </p>
         </div>
 
-        <Tabs defaultValue="enterprise" className="w-full">
-          <TabsList className="grid grid-cols-3 md:grid-cols-6 bg-card/50 border border-border mb-8">
-            {industries.map((industry) => (
+        <Tabs defaultValue="saas" className="w-full">
+          <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 bg-card/50 mb-6 sm:mb-8 h-auto">
+            {solutions.map((solution) => (
               <TabsTrigger
-                key={industry.id}
-                value={industry.id}
-                className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary"
+                key={solution.id}
+                value={solution.id}
+                className="flex flex-col items-center gap-1.5 py-3 px-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary"
               >
                 <div className="flex flex-col items-center gap-1">
-                  {industry.icon}
-                  <span>{industry.label}</span>
+                  {solution.icon}
+                  <span className="text-sm truncate">{solution.label}</span>
                 </div>
               </TabsTrigger>
             ))}
           </TabsList>
 
-          {industries.map((industry) => (
-            <TabsContent key={industry.id} value={industry.id}>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-6">
-                  <h3 className="text-2xl md:text-3xl font-bold">{industry.title}</h3>
-                  <p className="text-muted-foreground">{industry.description}</p>
+          {solutions.map((solution) => (
+            <TabsContent key={solution.id} value={solution.id}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={solution.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-start lg:items-center"
+                >
+                  <div className="space-y-4 sm:space-y-6">
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold">{solution.title}</h3>
+                    <p className="text-sm sm:text-base text-muted-foreground">{solution.description}</p>
 
-                  <div className="space-y-3">
-                    {industry.features.map((feature, index) => (
-                      <div key={index} className="flex items-center space-x-2">
-                        <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
-                        <span className="text-muted-foreground">{feature}</span>
-                      </div>
-                    ))}
+                    <div className="grid grid-cols-1 gap-2 sm:gap-3">
+                      {solution.features.map((feature, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                          className="flex items-center space-x-2"
+                        >
+                          <div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary"></div>
+                          <span className="text-sm sm:text-base text-muted-foreground">{feature}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    <Link href={`/solutions/${solution.id}`}>
+                      <Button className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white mt-4">
+                        Explore Solutions
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
                   </div>
 
-                  <Button className="bg-primary hover:bg-primary/90 text-white">
-                    Learn More
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-primary/10 rounded-xl filter blur-xl opacity-70"></div>
-                  <div className="relative bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden">
-                    <Image
-                      src={industry.image || "/placeholder.svg"}
-                      alt={industry.title}
-                      width={600}
-                      height={400}
-                      className="w-full h-auto"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-background/80 via-background/50 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 p-6">
-                      <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs">
-                        <span className="text-primary font-medium">{industry.label} Solution</span>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: 0.2 }}
+                    className="relative mt-6 lg:mt-0"
+                  >
+                    <div className="absolute -inset-4 bg-primary/10 rounded-xl filter blur-lg opacity-70"></div>
+                    <div className="relative bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden">
+                      <Image
+                        src={solution.image || "/placeholder.svg"}
+                        alt={solution.title}
+                        width={600}
+                        height={400}
+                        className="w-full h-auto"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-background/80 via-background/50 to-transparent"></div>
+                      <div className="absolute bottom-0 left-0 p-4 sm:p-6">
+                        <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs">
+                          <span className="text-primary font-medium">{solution.label} Solutions</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
+                  </motion.div>
+                </motion.div>
+              </AnimatePresence>
             </TabsContent>
           ))}
         </Tabs>
