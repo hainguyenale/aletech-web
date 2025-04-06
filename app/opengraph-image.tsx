@@ -18,23 +18,30 @@ export default async function Image() {
     (
       <div
         style={{
+          fontSize: 128,
+          background: "#111",
           width: "100%",
           height: "100%",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "#111",
+          color: "#fff",
         }}
       >
-        <img
-          src="/images/aletch-logo.png"
-          alt="Aletech Logo"
-          width={600}
-          height={315}
-          style={{
-            objectFit: "contain",
-          }}
-        />
+        <div style={{ display: "flex", alignItems: "center", marginBottom: 40 }}>
+          <img
+            src="/images/aletech-logo.png"
+            alt="Aletech Logo"
+            width={200}
+            height={200}
+            style={{
+              marginRight: 40,
+            }}
+          />
+          <div style={{ fontSize: 96, fontWeight: "bold", color: "#30C8C9" }}>ALETECH</div>
+        </div>
+        <div style={{ fontSize: 36, color: "#ccc" }}>Innovative Technology Solutions</div>
       </div>
     ),
     {
