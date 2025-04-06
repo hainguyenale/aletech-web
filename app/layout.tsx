@@ -31,7 +31,7 @@ export default function RootLayout({
         )} 
         suppressHydrationWarning
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <PageTransition>{children}</PageTransition>
         </ThemeProvider>
       </body>
