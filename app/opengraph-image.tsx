@@ -30,17 +30,8 @@ export default async function Image() {
             color: "#fff",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", marginBottom: 40 }}>
-            <img
-              src="https://aletech-website.vercel.app/logos/aletech.svg"
-              alt="Aletech Logo"
-              width={200}
-              height={200}
-              style={{
-                marginRight: 40,
-              }}
-            />
-            <div style={{ fontSize: 96, fontWeight: "bold", color: "#30C8C9" }}>ALETECH</div>
+          <div style={{ fontSize: 96, fontWeight: "bold", color: "#30C8C9", marginBottom: 40 }}>
+            ALETECH
           </div>
           <div style={{ fontSize: 36, color: "#ccc" }}>Innovative Technology Solutions</div>
         </div>
