@@ -15,38 +15,31 @@ export const contentType = "image/png"
 // Image generation
 export default async function Image() {
   return new ImageResponse(
-    // ImageResponse JSX element
-    <div
-      style={{
-        fontSize: 128,
-        background: "#111",
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#fff",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", marginBottom: 40 }}>
+    (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#111",
+        }}
+      >
         <img
-          src="/logos/aletech.svg"
+          src="/images/aletch-logo.png"
           alt="Aletech Logo"
-          width={200}
-          height={200}
+          width={600}
+          height={315}
           style={{
-            marginRight: 40,
+            objectFit: "contain",
           }}
         />
-        <div style={{ fontSize: 96, fontWeight: "bold", color: "#30C8C9" }}>ALETECH</div>
       </div>
-      <div style={{ fontSize: 36, color: "#ccc" }}>Innovative Technology Solutions</div>
-    </div>,
-    // ImageResponse options
+    ),
     {
       ...size,
-    },
+    }
   )
 }
 
