@@ -20,7 +20,7 @@ export default function StaggerContainer({
 }: StaggerContainerProps) {
   const controls = useAnimation()
   const [ref, inView] = useInView({
-    triggerOnce: true,
+    triggerOnce: false,
     threshold: 0.1,
   })
 
@@ -34,28 +34,11 @@ export default function StaggerContainer({
   }
 
   useEffect(() => {
-    // Reset animation when component mounts
-    controls.set("hidden")
-
     if (inView) {
       controls.start("show")
-    }
-
-    // Listen for page change events
-    const handlePageChange = () => {
-      // Reset animation state when navigating to a new page
+    } else {
       controls.set("hidden")
-
-      // Restart animations with a small delay
-      setTimeout(() => {
-        if (inView) {
-          controls.start("show")
-        }
-      }, 100)
     }
-
-    window.addEventListener("page-changed", handlePageChange)
-    return () => window.removeEventListener("page-changed", handlePageChange)
   }, [controls, inView])
 
   return (

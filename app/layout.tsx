@@ -32,7 +32,11 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <PageTransition>{children}</PageTransition>
+          {/* <PageTransition> */}
+            <div className="page-content fixed inset-0 overflow-y-auto">
+              {children}
+            </div>
+            {/* </PageTransition> */}
         </ThemeProvider>
       </body>
     </html>

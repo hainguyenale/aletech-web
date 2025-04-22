@@ -144,12 +144,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {/* Progress bar */}
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-primary z-50"
-        style={{ scaleX, transformOrigin: "0%" }}
-      />
-
       <Navbar />
 
       <HeroSection data={data.hero} />

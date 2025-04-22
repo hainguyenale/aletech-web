@@ -3,7 +3,8 @@ import { aboutSchema } from './about'
 import { homeSchema } from './home'
 import { projectsSchema } from './projects'
 import { projectSchema } from './project'
+import { investorsSchema } from './investors'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [homeSchema, aboutSchema, projectsSchema, projectSchema],
+  types: [homeSchema, aboutSchema, projectsSchema, projectSchema, investorsSchema],
 }

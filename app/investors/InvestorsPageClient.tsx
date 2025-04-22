@@ -10,98 +10,130 @@ import { motion } from "framer-motion"
 import FadeIn from "@/components/animations/fade-in"
 import StaggerContainer from "@/components/animations/stagger-container"
 import StaggerItem from "@/components/animations/stagger-item"
+import { useState } from "react"
 
-export default function InvestorsPageClient() {
-  const financialReports = [
-    {
-      title: "Annual Report 2024",
-      date: "March 15, 2025",
-      fileSize: "5.2 MB",
-      type: "PDF",
-    },
-    {
-      title: "Q4 2024 Financial Results",
-      date: "February 10, 2025",
-      fileSize: "3.8 MB",
-      type: "PDF",
-    },
-    {
-      title: "Q3 2024 Financial Results",
-      date: "November 12, 2024",
-      fileSize: "3.5 MB",
-      type: "PDF",
-    },
-    {
-      title: "Q2 2024 Financial Results",
-      date: "August 15, 2024",
-      fileSize: "3.7 MB",
-      type: "PDF",
-    },
-    {
-      title: "Q1 2024 Financial Results",
-      date: "May 10, 2024",
-      fileSize: "3.4 MB",
-      type: "PDF",
-    },
-    {
-      title: "Annual Report 2023",
-      date: "March 20, 2024",
-      fileSize: "5.0 MB",
-      type: "PDF",
-    },
-  ]
+interface SanityImage {
+  url: string
+  metadata: {
+    dimensions: {
+      width: number
+      height: number
+    }
+  }
+}
 
-  const upcomingEvents = [
-    {
-      title: "Q1 2025 Earnings Call",
-      date: "May 15, 2025",
-      time: "2:00 PM EST",
-      location: "Virtual Event",
-    },
-    {
-      title: "Annual Shareholder Meeting",
-      date: "June 10, 2025",
-      time: "10:00 AM EST",
-      location: "Aletech Headquarters, San Francisco",
-    },
-    {
-      title: "Investor Day 2025",
-      date: "September 22, 2025",
-      time: "9:00 AM - 4:00 PM EST",
-      location: "New York City",
-    },
-  ]
+interface SanityFile {
+  url: string
+  size: number
+  originalFilename: string
+}
 
-  const boardMembers = [
-    {
-      name: "Dr. James Wilson",
-      position: "Chairman of the Board",
-      image: "/placeholder.svg?height=300&width=300",
-    },
-    {
-      name: "Sarah Johnson",
-      position: "Chief Executive Officer",
-      image: "/placeholder.svg?height=300&width=300",
-    },
-    {
-      name: "Michael Chen",
-      position: "Chief Technology Officer",
-      image: "/placeholder.svg?height=300&width=300",
-    },
-    {
-      name: "Emily Rodriguez",
-      position: "Chief Operating Officer",
-      image: "/placeholder.svg?height=300&width=300",
-    },
-  ]
+interface InvestorsData {
+  pageHeader: {
+    title: string
+    description: string
+  }
+  financialHighlights: {
+    tagline: string
+    title: string
+    description: string
+    metrics: {
+      title: string
+      value: string
+      growth: string
+      progressPercentage: number
+      icon: string
+    }[]
+  }
+  financialReports: {
+    tagline: string
+    title: string
+    description: string
+    reports: {
+      title: string
+      date: string
+      file: SanityFile
+      type: string
+    }[]
+  }
+  upcomingEvents: {
+    tagline: string
+    title: string
+    description: string
+    events: {
+      title: string
+      date: string
+      time: string
+      location: string
+    }[]
+    presentation: {
+      title: string
+      description: string
+      thumbnailImage: SanityImage
+      videoUrl: string
+    }
+  }
+  boardOfDirectors: {
+    tagline: string
+    title: string
+    description: string
+    members: {
+      name: string
+      position: string
+      image: SanityImage
+    }[]
+  }
+  contactIR: {
+    title: string
+    description: string
+    email: string
+    phone: string
+    address: string[]
+  }
+}
+
+interface InvestorsPageClientProps {
+  initialData: InvestorsData
+}
+
+// Helper function to format file size
+const formatFileSize = (bytes: number) => {
+  if (bytes === 0) return '0 B'
+  const k = 1024
+  const sizes = ['B', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`
+}
+
+// Helper function to format date
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+export default function InvestorsPageClient({ initialData }: InvestorsPageClientProps) {
+  const [visibleReports, setVisibleReports] = useState(6)
+
+  // Function to add event to calendar
+  const addToCalendar = (event: { title: string; date: string; time: string; location: string }) => {
+    const startDate = new Date(`${event.date} ${event.time}`)
+    const endDate = new Date(startDate.getTime() + 60 * 60 * 1000) // Add 1 hour
+
+    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${startDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}\/${endDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}&details=${encodeURIComponent(`Location: ${event.location}`)}&location=${encodeURIComponent(event.location)}`
+
+    window.open(googleCalendarUrl, '_blank')
+  }
 
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
 
       <PageHeader
-        title="Investor Relations"
-        description="Information for investors about Aletech's financial performance, governance, and growth strategy."
+        title={initialData.pageHeader.title}
+        description={initialData.pageHeader.description}
       />
 
       {/* Financial Highlights */}
@@ -111,169 +143,58 @@ export default function InvestorsPageClient() {
             <div className="text-center max-w-3xl mx-auto mb-16">
               <div className="inline-block mb-4">
                 <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-sm">
-                  <span className="text-primary font-medium">Financial Highlights</span>
+                  <span className="text-primary font-medium">{initialData.financialHighlights.tagline}</span>
                 </div>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Strong Performance and Growth</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{initialData.financialHighlights.title}</h2>
               <p className="text-muted-foreground text-lg">
-                Aletech continues to deliver strong financial results, driven by innovation, operational excellence, and
-                strategic expansion.
+                {initialData.financialHighlights.description}
               </p>
             </div>
           </FadeIn>
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <StaggerItem>
-              <motion.div
-                className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:border-primary/30 transition-all duration-300"
-                whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(48, 200, 201, 0.2)" }}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium">Annual Revenue</h3>
-                  <TrendingUp className="h-5 w-5 text-primary" />
-                </div>
+            {initialData.financialHighlights.metrics.map((metric, index) => (
+              <StaggerItem key={index}>
                 <motion.div
-                  className="text-3xl font-bold mb-2"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
+                  className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:border-primary/30 transition-all duration-300"
+                  whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(48, 200, 201, 0.2)" }}
                 >
-                  $245.8M
-                </motion.div>
-                <div className="text-sm text-primary">+18.5% YoY</div>
-                <motion.div
-                  className="mt-4 h-2 w-full bg-muted rounded-full overflow-hidden"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "100%" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium">{metric.title}</h3>
+                    {metric.icon === 'TrendingUp' && <TrendingUp className="h-5 w-5 text-primary" />}
+                    {metric.icon === 'BarChart3' && <BarChart3 className="h-5 w-5 text-primary" />}
+                    {metric.icon === 'PieChart' && <PieChart className="h-5 w-5 text-primary" />}
+                  </div>
                   <motion.div
-                    className="h-full bg-primary"
-                    style={{ width: "75%" }}
-                    initial={{ width: 0 }}
-                    whileInView={{ width: "75%" }}
+                    className="text-3xl font-bold mb-2"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                  ></motion.div>
-                </motion.div>
-              </motion.div>
-            </StaggerItem>
-
-            <StaggerItem>
-              <motion.div
-                className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:border-primary/30 transition-all duration-300"
-                whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(48, 200, 201, 0.2)" }}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium">EBITDA</h3>
-                  <BarChart3 className="h-5 w-5 text-primary" />
-                </div>
-                <motion.div
-                  className="text-3xl font-bold mb-2"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
-                >
-                  $67.2M
-                </motion.div>
-                <div className="text-sm text-primary">+22.3% YoY</div>
-                <motion.div
-                  className="mt-4 h-2 w-full bg-muted rounded-full overflow-hidden"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "100%" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                >
+                    transition={{ duration: 0.5 }}
+                  >
+                    {metric.value}
+                  </motion.div>
+                  <div className="text-sm text-primary">{metric.growth}</div>
                   <motion.div
-                    className="h-full bg-primary"
-                    style={{ width: "65%" }}
+                    className="mt-4 h-2 w-full bg-muted rounded-full overflow-hidden"
                     initial={{ width: 0 }}
-                    whileInView={{ width: "65%" }}
+                    whileInView={{ width: "100%" }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                  ></motion.div>
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                  >
+                    <motion.div
+                      className="h-full bg-primary"
+                      style={{ width: `${metric.progressPercentage}%` }}
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${metric.progressPercentage}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, delay: 0.4 }}
+                    ></motion.div>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            </StaggerItem>
-
-            <StaggerItem>
-              <motion.div
-                className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:border-primary/30 transition-all duration-300"
-                whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(48, 200, 201, 0.2)" }}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium">Operating Margin</h3>
-                  <PieChart className="h-5 w-5 text-primary" />
-                </div>
-                <motion.div
-                  className="text-3xl font-bold mb-2"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
-                >
-                  27.3%
-                </motion.div>
-                <div className="text-sm text-primary">+2.5% YoY</div>
-                <motion.div
-                  className="mt-4 h-2 w-full bg-muted rounded-full overflow-hidden"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "100%" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                >
-                  <motion.div
-                    className="h-full bg-primary"
-                    style={{ width: "85%" }}
-                    initial={{ width: 0 }}
-                    whileInView={{ width: "85%" }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                  ></motion.div>
-                </motion.div>
-              </motion.div>
-            </StaggerItem>
-
-            <StaggerItem>
-              <motion.div
-                className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:border-primary/30 transition-all duration-300"
-                whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(48, 200, 201, 0.2)" }}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium">R&D Investment</h3>
-                  <TrendingUp className="h-5 w-5 text-primary" />
-                </div>
-                <motion.div
-                  className="text-3xl font-bold mb-2"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
-                >
-                  $42.3M
-                </motion.div>
-                <div className="text-sm text-primary">+15.7% YoY</div>
-                <motion.div
-                  className="mt-4 h-2 w-full bg-muted rounded-full overflow-hidden"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "100%" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                >
-                  <motion.div
-                    className="h-full bg-primary"
-                    style={{ width: "70%" }}
-                    initial={{ width: 0 }}
-                    whileInView={{ width: "70%" }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                  ></motion.div>
-                </motion.div>
-              </motion.div>
-            </StaggerItem>
+              </StaggerItem>
+            ))}
           </StaggerContainer>
         </div>
       </section>
@@ -285,19 +206,18 @@ export default function InvestorsPageClient() {
             <div className="text-center max-w-3xl mx-auto mb-16">
               <div className="inline-block mb-4">
                 <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-sm">
-                  <span className="text-primary font-medium">Financial Reports</span>
+                  <span className="text-primary font-medium">{initialData.financialReports.tagline}</span>
                 </div>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Annual and Quarterly Reports</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{initialData.financialReports.title}</h2>
               <p className="text-muted-foreground text-lg">
-                Access our latest financial reports and presentations for detailed information on our performance and
-                outlook.
+                {initialData.financialReports.description}
               </p>
             </div>
           </FadeIn>
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {financialReports.map((report, index) => (
+            {initialData.financialReports.reports.slice(0, visibleReports).map((report, index) => (
               <StaggerItem key={index}>
                 <motion.div
                   className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:border-primary/30 transition-all duration-300 flex flex-col"
@@ -309,10 +229,12 @@ export default function InvestorsPageClient() {
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-lg font-bold mb-1">{report.title}</h3>
-                      <p className="text-sm text-muted-foreground">{report.date}</p>
+                      <p className="text-sm text-muted-foreground">{formatDate(report.date)}</p>
                     </div>
-                    <motion.div
-                      className="bg-primary/10 p-2 rounded-full"
+                    <motion.a
+                      href={report.file.url}
+                      download
+                      className="bg-primary/10 p-2 rounded-full cursor-pointer"
                       whileHover={{
                         scale: 1.1,
                         backgroundColor: "rgba(48, 200, 201, 0.2)",
@@ -320,11 +242,11 @@ export default function InvestorsPageClient() {
                       whileTap={{ scale: 0.9 }}
                     >
                       <Download className="h-5 w-5 text-primary" />
-                    </motion.div>
+                    </motion.a>
                   </div>
 
                   <div className="mt-auto pt-4 flex items-center justify-between text-sm text-muted-foreground">
-                    <span>{report.fileSize}</span>
+                    <span>{formatFileSize(report.file.size)}</span>
                     <span>{report.type}</span>
                   </div>
                 </motion.div>
@@ -332,15 +254,21 @@ export default function InvestorsPageClient() {
             ))}
           </StaggerContainer>
 
-          <div className="text-center mt-12">
-            <FadeIn direction="up" delay={0.5}>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
-                  View All Reports
-                </Button>
-              </motion.div>
-            </FadeIn>
-          </div>
+          {visibleReports < initialData.financialReports.reports.length && (
+            <div className="text-center mt-12">
+              <FadeIn direction="up" delay={0.5}>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    variant="outline" 
+                    className="border-primary text-primary hover:bg-primary hover:text-white"
+                    onClick={() => setVisibleReports(prev => prev + 6)}
+                  >
+                    Load More
+                  </Button>
+                </motion.div>
+              </FadeIn>
+            </div>
+          )}
         </div>
       </section>
 
@@ -352,19 +280,18 @@ export default function InvestorsPageClient() {
               <div>
                 <div className="inline-block mb-4">
                   <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-sm">
-                    <span className="text-primary font-medium">Upcoming Events</span>
+                    <span className="text-primary font-medium">{initialData.upcomingEvents.tagline}</span>
                   </div>
                 </div>
 
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">Investor Events Calendar</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">{initialData.upcomingEvents.title}</h2>
 
                 <p className="text-muted-foreground mb-8">
-                  Join us for upcoming earnings calls, shareholder meetings, and investor conferences to stay informed
-                  about Aletech's performance and strategy.
+                  {initialData.upcomingEvents.description}
                 </p>
 
                 <StaggerContainer className="space-y-6">
-                  {upcomingEvents.map((event, index) => (
+                  {initialData.upcomingEvents.events.map((event, index) => (
                     <StaggerItem key={index}>
                       <motion.div
                         className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:border-primary/30 transition-all duration-300"
@@ -379,13 +306,13 @@ export default function InvestorsPageClient() {
                             whileHover={{ scale: 1.05, backgroundColor: "rgba(48, 200, 201, 0.2)" }}
                           >
                             <Calendar className="h-6 w-6 text-primary mb-1" />
-                            <div className="text-xs text-primary font-medium">{event.date.split(" ")[0]}</div>
+                            <div className="text-xs text-primary font-medium">{formatDate(event.date).split(" ")[0]}</div>
                           </motion.div>
 
                           <div>
                             <h3 className="text-lg font-bold mb-1">{event.title}</h3>
                             <p className="text-sm text-muted-foreground mb-2">
-                              {event.date} | {event.time}
+                              {formatDate(event.date)} | {event.time}
                             </p>
                             <p className="text-sm text-muted-foreground">{event.location}</p>
                           </div>
@@ -397,7 +324,12 @@ export default function InvestorsPageClient() {
 
                 <div className="mt-8">
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button className="bg-primary hover:bg-primary/90 text-white">Add to Calendar</Button>
+                    <Button 
+                      className="bg-primary hover:bg-primary/90 text-white"
+                      onClick={() => addToCalendar(initialData.upcomingEvents.events[0])}
+                    >
+                      Add to Calendar
+                    </Button>
                   </motion.div>
                 </div>
               </div>
@@ -420,16 +352,16 @@ export default function InvestorsPageClient() {
                 <div className="relative bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden">
                   <div className="aspect-video w-full relative">
                     <Image
-                      src="/placeholder.svg?height=400&width=600"
-                      alt="Investor presentation"
-                      width={600}
-                      height={400}
+                      src={initialData.upcomingEvents.presentation.thumbnailImage.url}
+                      alt={initialData.upcomingEvents.presentation.title}
+                      width={initialData.upcomingEvents.presentation.thumbnailImage.metadata.dimensions.width}
+                      height={initialData.upcomingEvents.presentation.thumbnailImage.metadata.dimensions.height}
                       className="w-full h-auto"
                     />
                     <div className="absolute inset-0 bg-gradient-to-tr from-background/80 via-background/50 to-transparent"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <motion.div
-                        className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center"
+                        className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center cursor-pointer"
                         whileHover={{ scale: 1.1 }}
                         animate={{
                           scale: [1, 1.05, 1],
@@ -439,6 +371,7 @@ export default function InvestorsPageClient() {
                           repeat: Number.POSITIVE_INFINITY,
                           repeatType: "reverse",
                         }}
+                        onClick={() => window.open(initialData.upcomingEvents.presentation.videoUrl, '_blank')}
                       >
                         <div className="w-16 h-16 rounded-full bg-primary/30 flex items-center justify-center">
                           <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
@@ -451,15 +384,15 @@ export default function InvestorsPageClient() {
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-bold mb-2">Latest Investor Presentation</h3>
+                    <h3 className="text-xl font-bold mb-2">{initialData.upcomingEvents.presentation.title}</h3>
                     <p className="text-muted-foreground mb-4">
-                      Watch our CEO's presentation from the Q4 2024 earnings call discussing our financial results and
-                      future outlook.
+                      {initialData.upcomingEvents.presentation.description}
                     </p>
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button
                         variant="outline"
                         className="border-primary text-primary hover:bg-primary hover:text-white"
+                        onClick={() => window.open(initialData.upcomingEvents.presentation.videoUrl, '_blank')}
                       >
                         Watch Presentation
                       </Button>
@@ -479,18 +412,18 @@ export default function InvestorsPageClient() {
             <div className="text-center max-w-3xl mx-auto mb-16">
               <div className="inline-block mb-4">
                 <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-sm">
-                  <span className="text-primary font-medium">Leadership</span>
+                  <span className="text-primary font-medium">{initialData.boardOfDirectors.tagline}</span>
                 </div>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Board of Directors</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{initialData.boardOfDirectors.title}</h2>
               <p className="text-muted-foreground text-lg">
-                Meet the experienced leaders guiding Aletech's strategic direction and governance.
+                {initialData.boardOfDirectors.description}
               </p>
             </div>
           </FadeIn>
 
           <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {boardMembers.map((member, index) => (
+            {initialData.boardOfDirectors.members.map((member, index) => (
               <StaggerItem key={index}>
                 <motion.div
                   className="bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden hover:border-primary/30 transition-all duration-300"
@@ -501,10 +434,10 @@ export default function InvestorsPageClient() {
                 >
                   <div className="relative">
                     <Image
-                      src={member.image || "/placeholder.svg"}
+                      src={member.image.url}
                       alt={member.name}
-                      width={300}
-                      height={300}
+                      width={member.image.metadata.dimensions.width}
+                      height={member.image.metadata.dimensions.height}
                       className="w-full h-auto"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
@@ -517,14 +450,6 @@ export default function InvestorsPageClient() {
               </StaggerItem>
             ))}
           </StaggerContainer>
-
-          <div className="text-center mt-12">
-            <FadeIn direction="up" delay={0.5}>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button className="bg-primary hover:bg-primary/90 text-white">View Full Leadership Team</Button>
-              </motion.div>
-            </FadeIn>
-          </div>
         </div>
       </section>
 
@@ -541,23 +466,25 @@ export default function InvestorsPageClient() {
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4">Investor Relations Contact</h2>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4">{initialData.contactIR.title}</h2>
                   <p className="text-muted-foreground mb-6">
-                    For investor-related inquiries, please contact our Investor Relations team.
+                    {initialData.contactIR.description}
                   </p>
 
                   <div className="space-y-4">
                     <div>
                       <p className="font-medium">Email:</p>
-                      <p className="text-primary">investors@aletech.com</p>
+                      <p className="text-primary">{initialData.contactIR.email}</p>
                     </div>
                     <div>
                       <p className="font-medium">Phone:</p>
-                      <p className="text-muted-foreground">+1 (555) 123-4567</p>
+                      <p className="text-muted-foreground">{initialData.contactIR.phone}</p>
                     </div>
                     <div>
                       <p className="font-medium">Address:</p>
-                      <p className="text-muted-foreground">123 Tech Avenue, San Francisco, CA 94105</p>
+                      {initialData.contactIR.address.map((line, index) => (
+                        <p key={index} className="text-muted-foreground">{line}</p>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -580,6 +507,7 @@ export default function InvestorsPageClient() {
                     <Button
                       variant="outline"
                       className="border-primary text-primary hover:bg-primary hover:text-white w-full"
+                      onClick={() => window.location.href = `mailto:${initialData.contactIR.email}`}
                     >
                       Email IR Team
                     </Button>

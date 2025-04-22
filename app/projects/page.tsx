@@ -9,7 +9,6 @@ export const metadata = {
 
 export default async function ProjectsPage() {
   const data = await client.fetch(projectPageQuery)
-  console.log('data', data)
   return <ProjectsPageClient initialData={data} />
 }
 

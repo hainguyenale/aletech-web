@@ -60,45 +60,7 @@ interface ProjectPageClientProps {
 
 export default function ProjectPageClient({ initialData }: ProjectPageClientProps) {
   const { controls, isClient } = usePageAnimations()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted || !isClient) {
-    return (
-      <main className="min-h-screen bg-background text-foreground">
-        <Navbar />
-        <div className="container px-4 mx-auto">
-          <div className="space-y-8 py-20">
-            {/* Loading skeletons... */}
-          </div>
-        </div>
-      </main>
-    )
-  }
-
-  const { project } = initialData
-
-  if (!project) {
-    return (
-      <main className="min-h-screen bg-background text-foreground">
-        <Navbar />
-        <div className="container px-4 mx-auto py-20">
-          <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
-          <p className="text-muted-foreground mb-8">The requested project could not be found.</p>
-          <Link href="/projects">
-            <Button>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Projects
-            </Button>
-          </Link>
-        </div>
-        <Footer />
-      </main>
-    )
-  }
+  
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -131,7 +93,6 @@ export default function ProjectPageClient({ initialData }: ProjectPageClientProp
 
       <section className="py-20 bg-background">
         <div className="container px-4 mx-auto">
-          {mounted && (
             <motion.div
               initial="hidden"
               animate={controls}
@@ -462,7 +423,6 @@ export default function ProjectPageClient({ initialData }: ProjectPageClientProp
                 </motion.div>
               )}
             </motion.div>
-          )}
         </div>
       </section>
 
