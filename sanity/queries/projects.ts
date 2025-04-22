@@ -1,0 +1,72 @@
+export const projectPageQuery = `*[_type == "projects"][0]{
+  pageHeader {
+    title,
+    description
+  },
+  "projects": projects[]-> {
+    id,
+    title,
+    category,
+    client,
+    "image": image.asset->{
+      url,
+      "dimensions": metadata.dimensions
+    },
+    description,
+    tags
+  },
+  categories,
+  cta {
+    title,
+    description,
+    primaryButton {
+      text,
+      link
+    },
+    "video": video.asset->{
+      url
+    },
+    "videoThumbnail": videoThumbnail.asset->{
+      url
+    }
+  }
+}`
+
+// Query for a single project by ID
+export const singleProjectQuery = `*[_type == "project" && id == $id][0]{
+  "project": {
+    id,
+    title,
+    category,
+    client,
+    "image": image.asset->{
+      url,
+      "dimensions": metadata.dimensions
+    },
+    description,
+    longDescription,
+    tags,
+    timeline,
+    teamSize,
+    keyFeatures,
+    architecture {
+      overview,
+      components[] {
+        name,
+        description
+      }
+    },
+    challenges,
+    solutions,
+    technologies,
+    results,
+    metrics[] {
+      label,
+      value,
+      description
+    },
+    caseStudy,
+    githubUrl,
+    liveUrl
+  }
+}` 

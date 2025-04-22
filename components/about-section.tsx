@@ -8,11 +8,19 @@ import { useInView } from "react-intersection-observer"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-interface AboutSectionProps {
-  showLearnMoreButton?: boolean
+interface AboutData {
+  tagline: string
+  title: string
+  description: string
+  features: string[]
 }
 
-export default function AboutSection({ showLearnMoreButton = true }: AboutSectionProps) {
+interface AboutSectionProps {
+  showLearnMoreButton?: boolean
+  data: AboutData
+}
+
+export default function AboutSection({ showLearnMoreButton = true, data }: AboutSectionProps) {
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
@@ -48,14 +56,7 @@ export default function AboutSection({ showLearnMoreButton = true }: AboutSectio
     },
   }
 
-  const features = [
-    "Problem-solving expertise with deep diagnostic capabilities",
-    "Collaborative culture with seamless client team integration",
-    "Global experience in US and UK markets",
-    "Secure and high-performance technology solutions",
-    "Continuous client alignment and open communication",
-    "Young, passionate, tech-savvy professional team",
-  ]
+  if (!data) return null
 
   return (
     <section id="about" className="py-20 bg-gradient-to-b from-background to-background/95">
@@ -180,20 +181,20 @@ export default function AboutSection({ showLearnMoreButton = true }: AboutSectio
           <motion.div className="space-y-6" variants={containerVariants} initial="hidden" animate={controls}>
             <motion.div variants={itemVariants} className="inline-block">
               <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-sm">
-                <span className="text-primary font-medium">About Aletech</span>
+                <span className="text-primary font-medium">{data.tagline}</span>
               </div>
             </motion.div>
 
             <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold">
-              Your Committed Outsourcing Partner
+              {data.title}
             </motion.h2>
 
             <motion.p variants={itemVariants} className="text-muted-foreground">
-              Aletech is dedicated to delivering tailored, end-to-end solutions by deeply understanding our clients' unique challenges. Our philosophy is to solve problems at the root, ensuring user-centered outcomes that align with business goals.
+              {data.description}
             </motion.p>
 
             <motion.div variants={containerVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {features.map((feature, index) => (
+              {data.features.map((feature, index) => (
                 <motion.div key={index} variants={itemVariants} className="flex items-center space-x-2">
                   <CheckCircle className="h-5 w-5 text-primary" />
                   <span className="text-sm text-muted-foreground">{feature}</span>

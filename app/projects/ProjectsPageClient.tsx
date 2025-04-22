@@ -11,94 +11,73 @@ import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePageAnimations } from "@/hooks/use-page-animations"
 
-export default function ProjectsPageClient() {
+interface Project {
+  id: string
+  title: string
+  category: string
+  client: string
+  image: {
+    url: string
+    dimensions: {
+      width: number
+      height: number
+    }
+  }
+  description: string
+  tags: string[]
+}
+
+interface ProjectsData {
+  pageHeader: {
+    title: string
+    description: string
+  }
+  projects: Project[]
+  categories: string[]
+  cta: {
+    title: string
+    description: string
+    video: {
+      url: string
+    }
+    videoThumbnail?: {
+      url: string
+    }
+    primaryButton: {
+      text: string
+      link: string
+    }
+  }
+}
+
+interface ProjectsPageClientProps {
+  initialData: ProjectsData
+}
+
+export default function ProjectsPageClient({ initialData }: ProjectsPageClientProps) {
   const [activeCategory, setActiveCategory] = useState("All")
-  const { controls, hasAnimated, isClient } = usePageAnimations()
+  const [allCategories, setAllCategories] = useState<string[]>(["All", ...initialData.categories])
+  const { controls, isClient } = usePageAnimations()
   const [mounted, setMounted] = useState(false)
 
-  // Set mounted to true after initial render
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  const projects = [
-    {
-      id: "uk-parking-control",
-      title: "UK Parking Control (UKPC)",
-      category: "Parking Management",
-      client: "UK Parking Management Company",
-      image: "images/ukpc-project.png",
-      description:
-        "Re-architected legacy systems into scalable microservices supporting up to 5 million requests/day with zero-downtime migration and improved performance.",
-      tags: ["Microservices", "Scalability", "Legacy Migration", "High Performance"],
-    },
-    {
-      id: "saas-parking-control",
-      title: "SaaS Parking Control",
-      category: "Parking Management",
-      client: "Multi-Region Parking Provider",
-      image: "images/saas-parking-control-project.png",
-      description: "SaaS-ready infrastructure for cross-border scalability with automated provisioning and flexibility for regulatory compliance.",
-      tags: ["SaaS", "Multi-Region", "Automation", "Compliance"],
-    },
-    {
-      id: "flynotes",
-      title: "Flynotes",
-      category: "Healthcare Tech",
-      client: "Healthcare Provider",
-      image: "images/flynotes-project.png",
-      description: "AI-powered dynamic consent generation platform providing fast, compliant, minimal-input process for patients.",
-      tags: ["AI", "Healthcare", "Consent Management", "Compliance"],
-    },
-    {
-      id: "beetoken",
-      title: "BeeToken",
-      category: "Fintech & Blockchain",
-      client: "Financial Services Company",
-      image: "images/beetoken-project.png",
-      description: "NFT-based voucher system for gifting with blockchain-enabled secure platform and intuitive UI.",
-      tags: ["NFT", "Blockchain", "Fintech", "Digital Currency"],
-    },
-    {
-      id: "pod-system",
-      title: "POD System",
-      category: "E-commerce & Printing",
-      client: "Print on Demand Company",
-      image: "images/pod-system-project.png",
-      description: "Handles 10k–20k orders/day with AI-driven analytics, integrating e-commerce channels and printing workflows.",
-      tags: ["AI", "E-commerce", "Print on Demand", "Analytics"],
-    },
-    {
-      id: "mina-chatbot",
-      title: "Mina Chatbot",
-      category: "AI & ERP",
-      client: "Enterprise Client",
-      image: "images/mina-project.png",
-      description: "Knowledge management system using RAG & LLM that understands and processes unstructured documents with chat/voice interface and secure, on-premise deployment.",
-      tags: ["RAG", "LLM", "Knowledge Management", "Chatbot"],
-    },
-    {
-      id: "lina-text2sql",
-      title: "Lina text2SQL",
-      category: "AI & ERP",
-      client: "Enterprise Client",
-      image: "images/lina-project.png",
-      description: "AI-based database querying system allowing non-developers to run queries with natural language, featuring role-based access, LLM & RAG powered, and enterprise integration.",
-      tags: ["AI", "NLP", "Database Querying", "Enterprise Integration"],
-    },
-  ]
-
-  const categories = [
-    "All",
-    "Parking Management",
-    "Healthcare Tech",
-    "Fintech & Blockchain",
-    "E-commerce & Printing",
-    "AI & ERP",
-  ]
+  if (!mounted || !isClient) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="container px-4 mx-auto">
+          {/* Loading skeletons... */}
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 
   const filteredProjects =
-    activeCategory === "All" ? projects : projects.filter((project) => project.category === activeCategory)
+    activeCategory === "All" ? initialData.projects : initialData.projects.filter((project) => project.category === activeCategory)
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -135,47 +114,44 @@ export default function ProjectsPageClient() {
       <Navbar />
 
       <PageHeader
-        title="Our Projects"
-        description="Explore our portfolio of problem-centered technology solutions across various industries, from parking management to healthcare and blockchain applications."
+        title={initialData.pageHeader.title}
+        description={initialData.pageHeader.description}
       />
 
       {/* Filter Categories */}
       <section className="py-8 bg-background/90 border-b border-border">
         <div className="container px-4 mx-auto overflow-x-auto">
-          {mounted && (
-            <motion.div
-              className="flex space-x-4 py-2 min-w-max"
-              initial={{ opacity: 0, y: 20 }}
-              animate={controls}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.5 },
-                },
-              }}
-            >
-              {categories.map((category, index) => (
-                <motion.button
-                  key={index}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    category === activeCategory
-                      ? "bg-primary text-white"
-                      : "bg-card/50 border border-border hover:border-primary/50 text-muted-foreground hover:text-foreground"
-                  }`}
-                  onClick={() => handleCategoryChange(category)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={hasAnimated ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.3, delay: 0.1 * index }}
-                >
-                  {category}
-                </motion.button>
-              ))}
-            </motion.div>
-          )}
+          <motion.div
+            className="flex space-x-4 py-2 min-w-max"
+            initial="visible"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.5 },
+              },
+            }}
+          >
+            {allCategories.map((category: string, index: number) => (
+              <motion.button
+                key={category}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  category === activeCategory
+                    ? "bg-primary text-white"
+                    : "bg-card/50 border border-border hover:border-primary/50 text-muted-foreground hover:text-foreground"
+                }`}
+                onClick={() => handleCategoryChange(category)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 * index }}
+              >
+                {category}
+              </motion.button>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -204,17 +180,17 @@ export default function ProjectsPageClient() {
                       >
                         <div className="relative">
                           <Image
-                            src={project.image || "/placeholder.svg"}
+                            src={project.image.url}
                             alt={project.title}
-                            width={600}
-                            height={400}
+                            width={project.image.dimensions.width}
+                            height={project.image.dimensions.height}
                             className="w-full h-auto"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
                           <motion.div
                             className="absolute top-4 left-4"
                             initial={{ opacity: 0, x: -20 }}
-                            animate={hasAnimated ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.3 }}
                           >
                             <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs">
@@ -290,15 +266,14 @@ export default function ProjectsPageClient() {
               <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-8 md:p-12">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                   <div>
-                    <h2 className="text-2xl md:text-3xl font-bold mb-4">Have a Project in Mind?</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-4">{initialData.cta.title}</h2>
                     <p className="text-muted-foreground mb-6">
-                      Let's discuss how Aletech can help bring your vision to life with our expertise in technology
-                      solutions.
+                      {initialData.cta.description}
                     </p>
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Link href="/contact">
+                      <Link href={initialData.cta.primaryButton.link}>
                         <Button className="bg-primary hover:bg-primary/90 text-white">
-                          Start a Project
+                          {initialData.cta.primaryButton.text}
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                       </Link>
@@ -318,29 +293,21 @@ export default function ProjectsPageClient() {
                         repeatType: "reverse",
                       }}
                     ></motion.div>
-                    <div className="relative aspect-video w-full bg-card/70 rounded-xl overflow-hidden">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <motion.div
-                          className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center"
-                          whileHover={{ scale: 1.1 }}
-                          animate={{
-                            scale: [1, 1.05, 1],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            repeatType: "reverse",
-                          }}
-                        >
-                          <div className="w-16 h-16 rounded-full bg-primary/30 flex items-center justify-center">
-                            <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
-                              <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-white">
-                                <path d="M8 5v14l11-7z" fill="currentColor" />
-                              </svg>
-                            </div>
-                          </div>
-                        </motion.div>
-                      </div>
+                    <div className="relative aspect-video w-full bg-card/70 rounded-xl overflow-hidden flex items-center justify-center">
+                      <video
+                        className="h-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        {...(initialData.cta.videoThumbnail?.url && {
+                          poster: initialData.cta.videoThumbnail.url
+                        })}
+                      >
+                        <source src={initialData.cta.video?.url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                      <div className="absolute inset-0 bg-black/20 hover:bg-black/0 transition-colors duration-300"></div>
                     </div>
                   </div>
                 </div>

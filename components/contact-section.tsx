@@ -1,14 +1,29 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react"
 
-export default function ContactSection() {
+interface ContactData {
+  tagline: string
+  title: string
+  description: string
+  contactInfo: Array<{
+    type: string
+    title: string
+    value: string
+    additionalInfo?: string[]
+  }>
+}
+
+interface ContactSectionProps {
+  data: ContactData
+}
+
+export default function ContactSection({ data }: ContactSectionProps) {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -42,6 +57,14 @@ export default function ContactSection() {
     }, 5000)
   }
 
+  if (!data) return null
+
+  const iconMap = {
+    email: Mail,
+    phone: Phone,
+    address: MapPin,
+  }
+
   return (
     <section id="contact" className="py-20 bg-background">
       <div className="container px-4 mx-auto">
@@ -49,49 +72,34 @@ export default function ContactSection() {
           <div>
             <div className="inline-block mb-6">
               <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-sm">
-                <span className="text-primary font-medium">Get In Touch</span>
+                <span className="text-primary font-medium">{data.tagline}</span>
               </div>
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Business?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{data.title}</h2>
 
             <p className="text-muted-foreground mb-8 max-w-lg">
-              Contact us today to discuss how Aletech can help you leverage technology to achieve your business goals.
-              Our team of experts is ready to provide tailored solutions for your unique challenges.
+              {data.description}
             </p>
 
             <div className="space-y-6">
-              <div className="flex items-start space-x-4">
-                <div className="bg-primary/10 p-3 rounded-full">
-                  <Mail className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">Email Us</h3>
-                  <p className="text-muted-foreground">ale.contact@aletech.co</p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="bg-primary/10 p-3 rounded-full">
-                  <Phone className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">Call Us</h3>
-                  <p className="text-muted-foreground">(+84) 947058209</p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="bg-primary/10 p-3 rounded-full">
-                  <MapPin className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">Visit Us</h3>
-                  <p className="text-muted-foreground">Eco City Premia, Km7</p>
-                  <p className="text-muted-foreground">Tan An ward, Buon Ma Thuot city</p>
-                  <p className="text-muted-foreground">Dak Lak province, Vietnam</p>
-                </div>
-              </div>
+              {data.contactInfo.map((info, index) => {
+                const Icon = iconMap[info.type as keyof typeof iconMap]
+                return (
+                  <div key={index} className="flex items-start space-x-4">
+                    <div className="bg-primary/10 p-3 rounded-full">
+                      <Icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold mb-1">{info.title}</h3>
+                      <p className="text-muted-foreground">{info.value}</p>
+                      {info.additionalInfo?.map((line, i) => (
+                        <p key={i} className="text-muted-foreground">{line}</p>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
 

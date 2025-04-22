@@ -7,8 +7,33 @@ import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import Image from "next/image"
 import Link from "next/link"
+import { client } from "@/sanity/lib/client"
+import { homeQuery } from "@/sanity/queries/home"
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  data: {
+    tagline: string
+    heading: {
+      text: string
+      highlightedText: string
+    }
+    description: string
+    primaryButton: {
+      text: string
+      link: string
+    }
+    secondaryButton: {
+      text: string
+      link: string
+    }
+    stats: Array<{
+      number: string
+      label: string
+    }>
+  }
+}
+
+export default function HeroSection({ data }: HeroSectionProps) {
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
@@ -94,22 +119,22 @@ export default function HeroSection() {
           >
             <motion.div variants={itemVariants} className="inline-block">
               <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-sm">
-                <span className="text-primary font-medium">Problem-Centered Solutions</span>
+                <span className="text-primary font-medium">{data.tagline}</span>
               </div>
             </motion.div>
 
             <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-              Solving Complex Challenges with <span className="text-primary">Innovative Technology</span>
+              {data.heading.text} <span className="text-primary">{data.heading.highlightedText}</span>
             </motion.h1>
 
             <motion.p variants={itemVariants} className="text-lg md:text-xl text-muted-foreground max-w-xl">
-              Aletech is your committed outsourcing partner, delivering tailored end-to-end solutions by deeply understanding your unique challenges and ensuring user-centered outcomes.
+              {data.description}
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
-              <Link href="/solutions">
+              <Link href={data.primaryButton.link}>
                 <Button size="lg" className="bg-primary hover:bg-primary/90 text-white group">
-                  <span>Explore Solutions</span>
+                  <span>{data.primaryButton.text}</span>
                   <motion.div
                     className="ml-2"
                     animate={{ x: [0, 5, 0] }}
@@ -119,47 +144,27 @@ export default function HeroSection() {
                   </motion.div>
                 </Button>
               </Link>
-              <Link href="/contact">
+              <Link href={data.secondaryButton.link}>
                 <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary/10">
-                  Contact Us
+                  {data.secondaryButton.text}
                 </Button>
               </Link>
             </motion.div>
 
             <motion.div variants={statsVariants} className="flex items-center gap-8 pt-4">
-              <motion.div variants={statItemVariants}>
-                <motion.p
-                  className="text-3xl font-bold text-primary"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.4, duration: 0.8 }}
-                >
-                  50+
-                </motion.p>
-                <p className="text-sm text-muted-foreground">Tech Professionals</p>
-              </motion.div>
-              <motion.div variants={statItemVariants}>
-                <motion.p
-                  className="text-3xl font-bold text-primary"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.6, duration: 0.8 }}
-                >
-                  7+
-                </motion.p>
-                <p className="text-sm text-muted-foreground">Years Experience</p>
-              </motion.div>
-              <motion.div variants={statItemVariants}>
-                <motion.p
-                  className="text-3xl font-bold text-primary"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.8, duration: 0.8 }}
-                >
-                  100%
-                </motion.p>
-                <p className="text-sm text-muted-foreground">Problem Solving</p>
-              </motion.div>
+              {data.stats.map((stat, index) => (
+                <motion.div key={index} variants={statItemVariants}>
+                  <motion.p
+                    className="text-3xl font-bold text-primary"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.4 + index * 0.2, duration: 0.8 }}
+                  >
+                    {stat.number}
+                  </motion.p>
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                </motion.div>
+              ))}
             </motion.div>
           </motion.div>
 

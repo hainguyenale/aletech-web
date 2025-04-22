@@ -1,144 +1,62 @@
+"use client"
+
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Cloud, Stethoscope, Wallet, ShoppingBag, Brain, Database } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
+import { Icon } from "@/components/ui/icon"
 
-export default function SolutionsSection() {
-  const solutions = [
-    {
-      id: "saas",
-      icon: <Cloud className="h-5 w-5" />,
-      label: "SaaS",
-      title: "SaaS Solutions",
-      description:
-        "Expertise in building scalable, multi-tenant SaaS platforms with robust architecture and seamless deployment capabilities.",
-      features: [
-        "Scalable microservices architecture",
-        "Multi-region deployment support",
-        "Zero-downtime migration strategies",
-        "Automated provisioning systems",
-        "Regulatory compliance frameworks",
-        "Usage-based billing integration",
-      ],
-      image: "images/saas-solution.png",
-    },
-    {
-      id: "healthcare",
-      icon: <Stethoscope className="h-5 w-5" />,
-      label: "Healthcare",
-      title: "Healthcare Technology",
-      description:
-        "Advanced healthcare solutions leveraging AI and automation to enhance patient care and streamline medical processes.",
-      features: [
-        "AI-powered medical systems",
-        "HIPAA-compliant architectures",
-        "Patient data security",
-        "Clinical workflow automation",
-        "Medical documentation systems",
-        "Healthcare API integrations",
-      ],
-      image: "images/healthcare-solution.png",
-    },
-    {
-      id: "fintech",
-      icon: <Wallet className="h-5 w-5" />,
-      label: "Fintech",
-      title: "Financial Technology",
-      description:
-        "Innovative fintech solutions combining blockchain technology, secure payment systems, and advanced financial services.",
-      features: [
-        "Blockchain implementation",
-        "Secure payment processing",
-        "Digital wallet systems",
-        "Financial data analytics",
-        "Regulatory compliance",
-        "Cross-border transactions",
-      ],
-      image: "images/fintech-solution.png",
-    },
-    {
-      id: "ecommerce",
-      icon: <ShoppingBag className="h-5 w-5" />,
-      label: "E-commerce",
-      title: "E-commerce Solutions",
-      description:
-        "Comprehensive e-commerce solutions with high-volume processing capabilities and intelligent business analytics.",
-      features: [
-        "High-volume order processing",
-        "Inventory management systems",
-        "Multi-channel integration",
-        "Real-time analytics",
-        "Supply chain optimization",
-        "Customer behavior analysis",
-      ],
-      image: "images/ecommerce-solution.png",
-    },
-    {
-      id: "ai",
-      icon: <Brain className="h-5 w-5" />,
-      label: "AI",
-      title: "Artificial Intelligence",
-      description:
-        "Cutting-edge AI solutions utilizing advanced machine learning, natural language processing, and intelligent automation.",
-      features: [
-        "Machine Learning models",
-        "Natural Language Processing",
-        "Computer Vision systems",
-        "Predictive analytics",
-        "AI-powered automation",
-        "Custom AI model training",
-      ],
-      image: "images/ai-solution.png",
-    },
-    {
-      id: "database",
-      icon: <Database className="h-5 w-5" />,
-      label: "Database",
-      title: "Database Solutions",
-      description:
-        "Advanced database solutions with intelligent querying, data processing, and enterprise-grade security features.",
-      features: [
-        "Intelligent query systems",
-        "Big Data processing",
-        "Data warehousing",
-        "Database optimization",
-        "Data security & compliance",
-        "Real-time data analytics",
-      ],
-      image: "images/database-solution.png",
-    },
-  ]
+interface SolutionData {
+  id: string
+  icon: string
+  label: string
+  title: string
+  description: string
+  features: string[]
+  image: string
+}
+
+interface SolutionsSectionProps {
+  data: {
+    title: string
+    description: string
+    solutions: SolutionData[]
+  }
+}
+
+export default function SolutionsSection({ data }: SolutionsSectionProps) {
+  if (!data) return null
 
   return (
     <section id="solutions" className="py-12 sm:py-16 md:py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 md:mb-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Our Solutions</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">{data.title}</h2>
           <div className="h-1 w-16 sm:w-20 bg-primary mx-auto mb-4 sm:mb-6"></div>
           <p className="text-base sm:text-lg text-muted-foreground">
-            Leveraging cutting-edge technology to deliver comprehensive solutions across multiple industries.
+            {data.description}
           </p>
         </div>
 
-        <Tabs defaultValue="saas" className="w-full">
+        <Tabs defaultValue={data.solutions[0]?.id} className="w-full">
           <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 bg-card/50 mb-6 sm:mb-8 h-auto">
-            {solutions.map((solution) => (
+            {data.solutions.map((solution) => (
               <TabsTrigger
                 key={solution.id}
                 value={solution.id}
                 className="flex flex-col items-center gap-1.5 py-3 px-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary"
               >
                 <div className="flex flex-col items-center gap-1">
-                  {solution.icon}
+                  <Icon name={solution.icon} className="h-5 w-5" />
                   <span className="text-sm truncate">{solution.label}</span>
                 </div>
               </TabsTrigger>
             ))}
           </TabsList>
 
-          {solutions.map((solution) => (
+          {data.solutions.map((solution) => (
             <TabsContent key={solution.id} value={solution.id}>
               <AnimatePresence mode="wait">
                 <motion.div

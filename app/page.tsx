@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { motion, useAnimation, useScroll, useTransform } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import Navbar from "@/components/navbar"
@@ -11,10 +11,91 @@ import SolutionsSection from "@/components/solutions-section"
 import TestimonialsSection from "@/components/testimonials-section"
 import ContactSection from "@/components/contact-section"
 import Footer from "@/components/footer"
+import { client } from "@/sanity/lib/client"
+import { homeQuery } from "@/sanity/queries/home"
+
+interface HomeData {
+  hero: {
+    tagline: string
+    heading: {
+      text: string
+      highlightedText: string
+    }
+    description: string
+    primaryButton: {
+      text: string
+      link: string
+    }
+    secondaryButton: {
+      text: string
+      link: string
+    }
+    stats: Array<{
+      number: string
+      label: string
+    }>
+  }
+  services: {
+    title: string
+    description: string
+    services: Array<{
+      icon: string
+      title: string
+      description: string
+    }>
+  }
+  about: {
+    tagline: string
+    title: string
+    description: string
+    features: string[]
+  }
+  solutions: {
+    title: string
+    subtitle: string
+    solutionsList: Array<{
+      id: string
+      icon: string
+      label: string
+      title: string
+      description: string
+      features: string[]
+      image: {
+        url: string
+      }
+      link: string
+    }>
+  }
+  testimonials: {
+    title: string
+    description: string
+    testimonials: Array<{
+      quote: string
+      name: string
+      title: string
+    }>
+  }
+  contact: {
+    tagline: string
+    title: string
+    description: string
+    contactInfo: Array<{
+      type: string
+      title: string
+      value: string
+      additionalInfo?: string[]
+    }>
+  }
+}
 
 export default function Home() {
+  const [data, setData] = useState<HomeData | null>(null)
   const { scrollYProgress } = useScroll()
   const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1])
+
+  useEffect(() => {
+    client.fetch<HomeData>(homeQuery).then(setData)
+  }, [])
 
   // Animation controls for sections
   const servicesControls = useAnimation()
@@ -32,32 +113,17 @@ export default function Home() {
 
   // Animate sections when they come into view
   useEffect(() => {
-    if (servicesInView) {
-      servicesControls.start("visible")
-    }
-    if (aboutInView) {
-      aboutControls.start("visible")
-    }
-    if (solutionsInView) {
-      solutionsControls.start("visible")
-    }
-    if (testimonialsInView) {
-      testimonialsControls.start("visible")
-    }
-    if (contactInView) {
-      contactControls.start("visible")
-    }
+    if (servicesInView) servicesControls.start("visible")
+    if (aboutInView) aboutControls.start("visible")
+    if (solutionsInView) solutionsControls.start("visible")
+    if (testimonialsInView) testimonialsControls.start("visible")
+    if (contactInView) contactControls.start("visible")
   }, [
-    servicesInView,
-    servicesControls,
-    aboutInView,
-    aboutControls,
-    solutionsInView,
-    solutionsControls,
-    testimonialsInView,
-    testimonialsControls,
-    contactInView,
-    contactControls,
+    servicesInView, servicesControls,
+    aboutInView, aboutControls,
+    solutionsInView, solutionsControls,
+    testimonialsInView, testimonialsControls,
+    contactInView, contactControls,
   ])
 
   // Animation variants
@@ -74,6 +140,8 @@ export default function Home() {
     },
   }
 
+  if (!data) return null
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Progress bar */}
@@ -84,26 +152,33 @@ export default function Home() {
 
       <Navbar />
 
-      <HeroSection />
+      <HeroSection data={data.hero} />
 
       <motion.div ref={servicesRef} initial="hidden" animate={servicesControls} variants={sectionVariants}>
-        <ServicesSection />
+        <ServicesSection data={data.services} />
       </motion.div>
 
       <motion.div ref={aboutRef} initial="hidden" animate={aboutControls} variants={sectionVariants}>
-        <AboutSection />
+        <AboutSection data={data.about} />
       </motion.div>
 
       <motion.div ref={solutionsRef} initial="hidden" animate={solutionsControls} variants={sectionVariants}>
-        <SolutionsSection />
+        <SolutionsSection data={{
+          title: data.solutions.title,
+          description: data.solutions.subtitle,
+          solutions: data.solutions.solutionsList.map(solution => ({
+            ...solution,
+            image: solution.image.url
+          }))
+        }} />
       </motion.div>
 
       <motion.div ref={testimonialsRef} initial="hidden" animate={testimonialsControls} variants={sectionVariants}>
-        <TestimonialsSection />
+        <TestimonialsSection data={data.testimonials} />
       </motion.div>
 
       <motion.div ref={contactRef} initial="hidden" animate={contactControls} variants={sectionVariants}>
-        <ContactSection />
+        <ContactSection data={data.contact} />
       </motion.div>
 
       <Footer />
