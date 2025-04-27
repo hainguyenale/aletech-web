@@ -197,4 +197,16 @@ export const projectSchema = defineType({
             type: "url",
         }),
     ],
+    preview: {
+        select: {
+            title: 'title',  // your title field
+            language: 'language'
+        },
+        prepare(selection) {
+            const { title, language } = selection;
+            return {
+                title: title ? `${title} [${language}]` : `[${language}]`
+            };
+        }
+    }
 }) 

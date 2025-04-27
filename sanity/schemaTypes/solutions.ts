@@ -166,6 +166,18 @@ export const solutionSchema = defineType({
             ],
         }),
     ],
+    preview: {
+        select: {
+            title: 'title',  // your title field
+            language: 'language'
+        },
+        prepare(selection) {
+            const { title, language } = selection;
+            return {
+                title: title ? `${title} [${language}]` : `[${language}]`
+            };
+        }
+    }
 })
 
 // Export both schemas for registration
