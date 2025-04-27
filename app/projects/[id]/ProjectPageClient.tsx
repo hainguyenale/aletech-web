@@ -99,7 +99,7 @@ export default function ProjectPageClient({ id }: ProjectPageClientProps) {
     }
 
     fetchData()
-  }, [id, language, initialLoad])
+  }, [id, language, initialLoad]) 
 
   if (!data) {
     return null

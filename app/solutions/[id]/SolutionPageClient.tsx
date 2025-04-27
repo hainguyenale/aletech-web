@@ -44,16 +44,25 @@ export default function SolutionPageClient({ id }: { id: string }) {
     const [initialLoad, setInitialLoad] = useState(true)
     const { language } = useLanguage()
     const controls = useAnimation()
-    const [ref, inView] = useInView({
-        triggerOnce: true,
+    const [featuresRef, featuresInView] = useInView({
+        triggerOnce: false,
         threshold: 0.1,
     })
 
     useEffect(() => {
-        if (inView) {
+        if (isChangingLanguage) {
+            controls.set("hidden")
+            setTimeout(() => {
+                controls.start("visible")
+            }, 100)
+        }
+    }, [controls, isChangingLanguage])
+
+    useEffect(() => {
+        if (featuresInView && !isChangingLanguage) {
             controls.start("visible")
         }
-    }, [controls, inView])
+    }, [controls, featuresInView, isChangingLanguage])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -87,6 +96,7 @@ export default function SolutionPageClient({ id }: { id: string }) {
             opacity: 1,
             transition: {
                 staggerChildren: 0.2,
+                delayChildren: 0.2,
             },
         },
     }
@@ -111,7 +121,7 @@ export default function SolutionPageClient({ id }: { id: string }) {
                 <section className="py-16 bg-background">
                     <div className="container mx-auto px-4 sm:px-6">
                         <motion.div
-                            ref={ref}
+                            ref={featuresRef}
                             initial="hidden"
                             animate={controls}
                             variants={containerVariants}

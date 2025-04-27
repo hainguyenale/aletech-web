@@ -14,6 +14,7 @@ import LoadingUI from "@/components/loading-ui"
 import { useLanguage } from "@/contexts/language-context"
 import { client } from "@/sanity/lib/client"
 import { projectPageQuery } from "@/sanity/queries/projects"
+import { useInView } from "react-intersection-observer"
 
 interface Project {
   id: string
@@ -63,6 +64,10 @@ export default function ProjectsPageClient() {
   const [activeCategory, setActiveCategory] = useState("All")
   const [allCategories, setAllCategories] = useState<string[]>(["All"])
   const { controls, isClient } = usePageAnimations()
+  const [ctaRef, ctaInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,6 +91,12 @@ export default function ProjectsPageClient() {
 
     fetchData()
   }, [language, initialLoad])
+
+  useEffect(() => {
+    if (ctaInView) {
+      controls.start("visible")
+    }
+  }, [controls, ctaInView])
 
   if (!data) {
     return null
@@ -263,6 +274,7 @@ export default function ProjectsPageClient() {
         <section className="py-20 bg-gradient-to-b from-background to-background/95">
           <div className="container px-4 mx-auto">
             <motion.div
+              ref={ctaRef}
               initial="hidden"
               animate={controls}
               variants={{

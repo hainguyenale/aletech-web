@@ -162,7 +162,7 @@ export default function InvestorsPageClient() {
   return (
     <React.Fragment>
       <LoadingUI isVisible={isChangingLanguage} />
-      <main className="min-h-screen bg-background text-foreground">
+      {!isChangingLanguage && <main className="min-h-screen bg-background text-foreground">
         <Navbar />
 
         <PageHeader
@@ -554,7 +554,7 @@ export default function InvestorsPageClient() {
         </section>
 
         <Footer />
-      </main>
+      </main>}
     </React.Fragment>
   )
 }

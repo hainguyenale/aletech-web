@@ -177,7 +177,7 @@ export default function Home() {
     <>
       <LoadingUI isVisible={isChangingLanguage} />
       
-      <main className="min-h-screen bg-background text-foreground">
+      {!isChangingLanguage && <main className="min-h-screen bg-background text-foreground">
         <Navbar />
 
         <HeroSection data={data.hero} />
@@ -210,7 +210,7 @@ export default function Home() {
         </motion.div>
 
         <Footer />
-      </main>
+      </main>}
     </>
   )
 }
