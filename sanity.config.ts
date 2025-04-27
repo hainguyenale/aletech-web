@@ -31,7 +31,7 @@ export default defineConfig({
         {id: 'vi', title: 'Vietnamese'},
         {id: 'en', title: 'English'}
       ],
-      schemaTypes: ['home', 'about', 'projects', 'project', 'investors'],
+      schemaTypes: ['home', 'about', 'projects', 'project', 'investors', 'contact'],
     })
   ],
 })

@@ -63,7 +63,7 @@ const LoadingUI = ({ isVisible }: LoadingUIProps) => {
           </motion.div>
 
           {/* Language Change Text */}
-          <motion.div
+          {/* <motion.div
             className="absolute bottom-12 left-0 right-0 text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -73,7 +73,7 @@ const LoadingUI = ({ isVisible }: LoadingUIProps) => {
             <span className="text-lg md:text-xl font-medium tracking-wide text-foreground/80">
               Changing language...
             </span>
-          </motion.div>
+          </motion.div> */}
         </motion.div>
       )}
     </AnimatePresence>
