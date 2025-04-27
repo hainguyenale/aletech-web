@@ -23,7 +23,7 @@ const LoadingUI = ({ isVisible }: LoadingUIProps) => {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{
-              duration: 0.7,
+              duration: 0.4,
               ease: [0.22, 1, 0.36, 1]
             }}
           />
@@ -35,7 +35,7 @@ const LoadingUI = ({ isVisible }: LoadingUIProps) => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{
-              duration: 0.7,
+              duration: 0.4,
               ease: [0.22, 1, 0.36, 1]
             }}
           />
@@ -47,7 +47,7 @@ const LoadingUI = ({ isVisible }: LoadingUIProps) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{
-              duration: 0.5,
+              duration: 0.4,
               ease: "easeOut"
             }}
           >

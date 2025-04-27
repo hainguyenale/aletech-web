@@ -74,7 +74,7 @@ export default function AboutPageClient() {
         if (!initialLoad) {
           setIsChangingLanguage(true)
           // Add artificial delay for smoother transition
-          await new Promise(resolve => setTimeout(resolve, 800))
+          await new Promise(resolve => setTimeout(resolve, 400))
         }
         
         const result = await client.fetch(aboutPageQuery, { language })

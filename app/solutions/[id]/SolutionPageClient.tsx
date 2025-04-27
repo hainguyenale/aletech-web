@@ -69,7 +69,7 @@ export default function SolutionPageClient({ id }: { id: string }) {
             try {
                 if (!initialLoad) {
                     setIsChangingLanguage(true)
-                    await new Promise(resolve => setTimeout(resolve, 800))
+                    await new Promise(resolve => setTimeout(resolve, 400))
                 }
 
                 const result = await client.fetch(solutionQuery, { id, language })
