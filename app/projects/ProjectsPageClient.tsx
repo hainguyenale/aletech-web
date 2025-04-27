@@ -128,7 +128,7 @@ export default function ProjectsPageClient() {
     <React.Fragment>
       <LoadingUI isVisible={isChangingLanguage} />
       
-      <main className="min-h-screen bg-background text-foreground">
+      {!isChangingLanguage && <main className="min-h-screen bg-background text-foreground">
         <Navbar />
 
         <PageHeader
@@ -328,7 +328,7 @@ export default function ProjectsPageClient() {
         </section>
 
         <Footer />
-      </main>
+      </main>}
     </React.Fragment>
   )
 }

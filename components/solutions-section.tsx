@@ -98,16 +98,17 @@ export default function SolutionsSection({ data }: SolutionsSectionProps) {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.2 }}
-                    className="relative mt-6 lg:mt-0"
+                    className="relative mt-6 lg:mt-0 w-full max-w-[400px] mx-auto"
                   >
                     <div className="absolute -inset-4 bg-primary/10 rounded-xl filter blur-lg opacity-70"></div>
-                    <div className="relative bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden">
+                    <div className="relative bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden p-4 h-[400px]">
                       <Image
                         src={solution.image || "/placeholder.svg"}
                         alt={solution.title}
-                        width={600}
-                        height={400}
-                        className="w-full h-auto"
+                        width={300}
+                        height={300}
+                        className="w-full h-full object-cover"
+                        priority
                       />
                       <div className="absolute inset-0 bg-gradient-to-tr from-background/80 via-background/50 to-transparent"></div>
                       <div className="absolute bottom-0 left-0 p-4 sm:p-6">

@@ -4,4 +4,12 @@ import type {StructureResolver} from 'sanity/structure'
 export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
-    .items(S.documentTypeListItems())
+    .items([
+      S.documentTypeListItem('home').title('Home'),
+      S.documentTypeListItem('about').title('About'),
+      S.documentTypeListItem('projects').title('Projects'),
+      S.documentTypeListItem('investors').title('Investors'),
+      S.documentTypeListItem('contact').title('Contact'),
+      S.documentTypeListItem('solutions').title('Solutions'),
+      S.documentTypeListItem('solution').title('Solution'),
+    ])

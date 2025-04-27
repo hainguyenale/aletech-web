@@ -23,15 +23,12 @@ export default function PageHeader({ title, description, showSolutionsDropdown =
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   useEffect(() => {
-    // Reset and start animations when component mounts or path changes
-    controls.set("hidden")
-
-    const timeout = setTimeout(() => {
-      controls.start("visible")
-    }, 100)
-
-    return () => clearTimeout(timeout)
-  }, [controls, pathname])
+    if (inView) {
+      controls.start("visible");
+    } else {
+      controls.set("hidden");
+    }
+  }, [controls, inView]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -85,6 +82,7 @@ export default function PageHeader({ title, description, showSolutionsDropdown =
       </div>
 
       <motion.div
+        ref={ref}
         className="container relative z-10 mx-auto text-center px-4 sm:px-6 max-w-[100vw]"
         variants={containerVariants}
         initial="hidden"
