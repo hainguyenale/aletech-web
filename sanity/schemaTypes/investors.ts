@@ -6,6 +6,12 @@ export const investorsSchema = defineType({
   type: 'document',
   fields: [
     defineField({
+        name: 'language',
+        type: 'string',
+        readOnly: true,
+        hidden: true
+    }),
+    defineField({
       name: 'pageHeader',
       title: 'Page Header',
       type: 'object',

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import PageHeader from "@/components/page-header"
@@ -8,46 +8,59 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, ArrowRight, Github, ExternalLink } from "lucide-react"
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { usePageAnimations } from "@/hooks/use-page-animations"
+import { useLanguage } from "@/contexts/language-context"
+import { client } from "@/sanity/lib/client"
+import { singleProjectQuery } from "@/sanity/queries/projects"
+import LoadingUI from "@/components/loading-ui"
+
+interface ImageDimensions {
+  width: number
+  height: number
+}
+
+interface Image {
+  url: string
+  dimensions: ImageDimensions
+}
+
+interface Metric {
+  value: string
+  label: string
+  description: string
+}
+
+interface ArchitectureComponent {
+  name: string
+  description: string
+}
+
+interface Architecture {
+  overview: string
+  components: ArchitectureComponent[]
+}
 
 interface Project {
-  id: string
   title: string
-  category: string
-  client: string
-  image: {
-    url: string
-    dimensions: {
-      width: number
-      height: number
-    }
-  }
   description: string
-  tags: string[]
+  category: string
   longDescription: string
-  timeline: string
-  teamSize: string
-  keyFeatures: string[]
-  architecture: {
-    overview: string
-    components: Array<{
-      name: string
-      description: string
-    }>
-  }
-  challenges: string[]
-  solutions: string[]
-  technologies: string[]
-  results: string[]
-  metrics: Array<{
-    label: string
-    value: string
-    description: string
-  }>
-  caseStudy: string
+  tags: string[]
   githubUrl?: string
   liveUrl?: string
+  image: Image
+  timeline: string
+  teamSize: string
+  client: string
+  keyFeatures?: string[]
+  architecture?: Architecture
+  challenges?: string[]
+  solutions?: string[]
+  technologies?: string[]
+  results?: string[]
+  metrics?: Metric[]
+  caseStudy?: string
 }
 
 interface ProjectData {
@@ -55,12 +68,44 @@ interface ProjectData {
 }
 
 interface ProjectPageClientProps {
-  initialData: ProjectData
+  id: string
 }
 
-export default function ProjectPageClient({ initialData }: ProjectPageClientProps) {
+export default function ProjectPageClient({ id }: ProjectPageClientProps) {
+  const [data, setData] = useState<ProjectData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isChangingLanguage, setIsChangingLanguage] = useState(false)
+  const [initialLoad, setInitialLoad] = useState(true)
+  const { language } = useLanguage()
   const { controls, isClient } = usePageAnimations()
-  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!initialLoad) {
+          setIsChangingLanguage(true)
+          await new Promise(resolve => setTimeout(resolve, 800))
+        }
+        
+        const result = await client.fetch(singleProjectQuery, { id, language })
+        setData(result)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        setIsLoading(false)
+        setIsChangingLanguage(false)
+        setInitialLoad(false)
+      }
+    }
+
+    fetchData()
+  }, [id, language, initialLoad])
+
+  if (!data) {
+    return null
+  }
+
+  const { project } = data
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -83,19 +128,18 @@ export default function ProjectPageClient({ initialData }: ProjectPageClientProp
   }
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <Navbar />
-
-      <PageHeader
-        title={project.title}
-        description={project.description}
-      />
-
-      <section className="py-20 bg-background">
-        <div className="container px-4 mx-auto">
+    <React.Fragment>
+      <LoadingUI isVisible={isChangingLanguage} />
+      
+      <main className="min-h-screen bg-background text-foreground">
+        <Navbar />
+        <PageHeader title={project.title} description={project.description} />
+        
+        <section className="py-20 bg-background">
+          <div className="container px-4 mx-auto">
             <motion.div
               initial="hidden"
-              animate={controls}
+              animate="visible"
               variants={containerVariants}
             >
               {/* Project Overview */}
@@ -423,10 +467,11 @@ export default function ProjectPageClient({ initialData }: ProjectPageClientProp
                 </motion.div>
               )}
             </motion.div>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </React.Fragment>
   )
 } 

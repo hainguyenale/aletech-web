@@ -1,4 +1,4 @@
-export const projectPageQuery = `*[_type == "projects"][0]{
+export const projectPageQuery = `*[_type == "projects"  && language == $language][0]{
   pageHeader {
     title,
     description

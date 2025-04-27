@@ -1,4 +1,4 @@
-export const homeQuery = `*[_type == "home"][0]{
+export const homeQuery = `*[_type == "home" && language == $language][0]{
   hero {
     tagline,
     heading {

@@ -1,4 +1,4 @@
-export const investorsPageQuery = `*[_type == "investors"][0]{
+export const investorsPageQuery = `*[_type == "investors"  && language == $language][0]{
   pageHeader {
     title,
     description

@@ -3,17 +3,35 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, X, ChevronDown } from "lucide-react"
-import { usePathname } from "next/navigation"
+import { Menu, X, ChevronDown, Globe } from "lucide-react"
+import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import ThemeToggle from "@/components/theme-toggle"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSolutionsDropdownOpen, setIsSolutionsDropdownOpen] = useState(false)
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
   const solutionsDropdownRef = useRef<HTMLDivElement>(null)
+  const languageDropdownRef = useRef<HTMLDivElement>(null)
+  const { language, setLanguage } = useLanguage()
+
+  console.log('Navbar current language:', language)
+
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'vi', name: 'Tiếng Việt' },
+  ]
+
+  const handleLanguageChange = (langCode: 'en' | 'vi') => {
+    console.log('Navbar language change requested:', langCode)
+    setIsLanguageDropdownOpen(false)
+    setLanguage(langCode)
+  }
 
   const isActive = (path: string) => {
     return pathname === path
@@ -48,6 +66,9 @@ export default function Navbar() {
     const handleClickOutside = (event: MouseEvent) => {
       if (solutionsDropdownRef.current && !solutionsDropdownRef.current.contains(event.target as Node)) {
         setIsSolutionsDropdownOpen(false)
+      }
+      if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
+        setIsLanguageDropdownOpen(false)
       }
     }
 
@@ -171,11 +192,94 @@ export default function Navbar() {
           </motion.div>
         </nav>
 
-        <div className="hidden md:flex items-center">
+        <div className="hidden md:flex items-center space-x-4">
+          <motion.div
+            ref={languageDropdownRef}
+            className="relative"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.7 }}
+          >
+            <button
+              className="flex items-center space-x-1 text-sm font-medium transition-colors hover:text-primary"
+              onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+            >
+              <Globe className="h-4 w-4" />
+              <span>{languages.find(lang => lang.code === language)?.name}</span>
+              <ChevronDown className={`h-4 w-4 transition-transform ${isLanguageDropdownOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            <AnimatePresence>
+              {isLanguageDropdownOpen && (
+                <motion.div
+                  className="absolute top-full right-0 mt-1 w-40 bg-card border border-border rounded-md shadow-lg z-10"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="py-2">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                          language === lang.code ? "text-primary bg-primary/10" : "hover:bg-primary/10"
+                        }`}
+                        onClick={() => handleLanguageChange(lang.code as 'en' | 'vi')}
+                      >
+                        {lang.name}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+
           <ThemeToggle />
         </div>
 
         <div className="md:hidden flex items-center space-x-4">
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <button
+              className="flex items-center space-x-1 text-sm font-medium transition-colors hover:text-primary"
+              onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+            >
+              <Globe className="h-4 w-4" />
+              <ChevronDown className={`h-4 w-4 transition-transform ${isLanguageDropdownOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            <AnimatePresence>
+              {isLanguageDropdownOpen && (
+                <motion.div
+                  className="absolute top-full right-0 mt-1 w-40 bg-card border border-border rounded-md shadow-lg z-10"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="py-2">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                          language === lang.code ? "text-primary bg-primary/10" : "hover:bg-primary/10"
+                        }`}
+                        onClick={() => handleLanguageChange(lang.code as 'en' | 'vi')}
+                      >
+                        {lang.name}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+
           <ThemeToggle />
 
           <motion.button

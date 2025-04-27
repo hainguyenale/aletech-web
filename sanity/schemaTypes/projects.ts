@@ -5,6 +5,12 @@ export const projectsSchema = defineType({
     title: "Projects Page",
     type: "document",
     fields: [
+        defineField({
+            name: 'language',
+            type: 'string',
+            readOnly: true,
+            hidden: true
+        }),
         // Page Header Section
         defineField({
             name: "pageHeader",

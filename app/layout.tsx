@@ -5,6 +5,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import PageTransition from "@/components/page-transition"
 import { cn } from "@/lib/utils"
+import { LanguageProvider } from "@/contexts/language-context"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -31,13 +32,15 @@ export default function RootLayout({
         )} 
         suppressHydrationWarning
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          {/* <PageTransition> */}
-            <div className="page-content fixed inset-0 overflow-y-auto">
-              {children}
-            </div>
+        <LanguageProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+            {/* <PageTransition> */}
+              <div className="page-content fixed inset-0 overflow-y-auto">
+                {children}
+              </div>
             {/* </PageTransition> */}
-        </ThemeProvider>
+          </ThemeProvider>
+        </LanguageProvider>
       </body>
     </html>
   )

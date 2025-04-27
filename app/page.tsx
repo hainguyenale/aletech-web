@@ -11,8 +11,10 @@ import SolutionsSection from "@/components/solutions-section"
 import TestimonialsSection from "@/components/testimonials-section"
 import ContactSection from "@/components/contact-section"
 import Footer from "@/components/footer"
+import LoadingUI from "@/components/loading-ui"
 import { client } from "@/sanity/lib/client"
 import { homeQuery } from "@/sanity/queries/home"
+import { useLanguage } from "@/contexts/language-context"
 
 interface HomeData {
   hero: {
@@ -89,29 +91,56 @@ interface HomeData {
 }
 
 export default function Home() {
+  // 1. All useState hooks
   const [data, setData] = useState<HomeData | null>(null)
+  const [isChangingLanguage, setIsChangingLanguage] = useState(false)
+  const [initialLoad, setInitialLoad] = useState(true)
+
+  // 2. All context hooks
+  const { language } = useLanguage()
+
+  // 3. All scroll and animation hooks
   const { scrollYProgress } = useScroll()
   const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1])
 
-  useEffect(() => {
-    client.fetch<HomeData>(homeQuery).then(setData)
-  }, [])
-
-  // Animation controls for sections
+  // 4. Animation controls
   const servicesControls = useAnimation()
   const aboutControls = useAnimation()
   const solutionsControls = useAnimation()
   const testimonialsControls = useAnimation()
   const contactControls = useAnimation()
 
-  // Refs for sections
+  // 5. Intersection observer hooks
   const [servicesRef, servicesInView] = useInView({ threshold: 0.1, triggerOnce: true })
   const [aboutRef, aboutInView] = useInView({ threshold: 0.1, triggerOnce: true })
   const [solutionsRef, solutionsInView] = useInView({ threshold: 0.1, triggerOnce: true })
   const [testimonialsRef, testimonialsInView] = useInView({ threshold: 0.1, triggerOnce: true })
   const [contactRef, contactInView] = useInView({ threshold: 0.1, triggerOnce: true })
 
-  // Animate sections when they come into view
+  // 6. Data fetching effect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!initialLoad) {
+          setIsChangingLanguage(true)
+          // Add artificial delay for smoother transition
+          await new Promise(resolve => setTimeout(resolve, 800))
+        }
+        
+        const result = await client.fetch<HomeData>(homeQuery, { language })
+        setData(result)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        setIsChangingLanguage(false)
+        setInitialLoad(false)
+      }
+    }
+
+    fetchData()
+  }, [language, initialLoad])
+
+  // 7. Animation effects
   useEffect(() => {
     if (servicesInView) servicesControls.start("visible")
     if (aboutInView) aboutControls.start("visible")
@@ -140,43 +169,49 @@ export default function Home() {
     },
   }
 
-  if (!data) return null
+  if (!data) {
+    return null
+  }
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <Navbar />
+    <>
+      <LoadingUI isVisible={isChangingLanguage} />
+      
+      <main className="min-h-screen bg-background text-foreground">
+        <Navbar />
 
-      <HeroSection data={data.hero} />
+        <HeroSection data={data.hero} />
 
-      <motion.div ref={servicesRef} initial="hidden" animate={servicesControls} variants={sectionVariants}>
-        <ServicesSection data={data.services} />
-      </motion.div>
+        <motion.div ref={servicesRef} initial="hidden" animate={servicesControls} variants={sectionVariants}>
+          <ServicesSection data={data.services} />
+        </motion.div>
 
-      <motion.div ref={aboutRef} initial="hidden" animate={aboutControls} variants={sectionVariants}>
-        <AboutSection data={data.about} />
-      </motion.div>
+        <motion.div ref={aboutRef} initial="hidden" animate={aboutControls} variants={sectionVariants}>
+          <AboutSection data={data.about} />
+        </motion.div>
 
-      <motion.div ref={solutionsRef} initial="hidden" animate={solutionsControls} variants={sectionVariants}>
-        <SolutionsSection data={{
-          title: data.solutions.title,
-          description: data.solutions.subtitle,
-          solutions: data.solutions.solutionsList.map(solution => ({
-            ...solution,
-            image: solution.image.url
-          }))
-        }} />
-      </motion.div>
+        <motion.div ref={solutionsRef} initial="hidden" animate={solutionsControls} variants={sectionVariants}>
+          <SolutionsSection data={{
+            title: data.solutions.title,
+            description: data.solutions.subtitle,
+            solutions: data.solutions.solutionsList.map(solution => ({
+              ...solution,
+              image: solution.image.url
+            }))
+          }} />
+        </motion.div>
 
-      <motion.div ref={testimonialsRef} initial="hidden" animate={testimonialsControls} variants={sectionVariants}>
-        <TestimonialsSection data={data.testimonials} />
-      </motion.div>
+        <motion.div ref={testimonialsRef} initial="hidden" animate={testimonialsControls} variants={sectionVariants}>
+          <TestimonialsSection data={data.testimonials} />
+        </motion.div>
 
-      <motion.div ref={contactRef} initial="hidden" animate={contactControls} variants={sectionVariants}>
-        <ContactSection data={data.contact} />
-      </motion.div>
+        <motion.div ref={contactRef} initial="hidden" animate={contactControls} variants={sectionVariants}>
+          <ContactSection data={data.contact} />
+        </motion.div>
 
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </>
   )
 }
 

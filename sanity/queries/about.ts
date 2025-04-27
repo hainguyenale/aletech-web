@@ -1,4 +1,4 @@
-export const aboutPageQuery = `*[_type == "about"][0]{
+export const aboutPageQuery = `*[_type == "about"  && language == $language][0]{
   pageHeader {
     title,
     description
