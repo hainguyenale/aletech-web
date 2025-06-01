@@ -13,6 +13,9 @@ interface AboutData {
   title: string
   description: string
   features: string[]
+  primaryButton?: {
+    text: string
+  }
 }
 
 interface AboutSectionProps {
@@ -205,7 +208,7 @@ export default function AboutSection({ showLearnMoreButton = true, data }: About
             {showLearnMoreButton && (
               <motion.div variants={itemVariants}>
                 <Link href="/about">
-                  <Button className="bg-primary hover:bg-primary/90 text-white">Learn More About Us</Button>
+                  <Button className="bg-primary hover:bg-primary/90 text-white">{data.primaryButton?.text}</Button>
                 </Link>
               </motion.div>
             )}

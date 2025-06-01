@@ -203,6 +203,26 @@ export const homeSchema = defineType({
           ],
           validation: Rule => Rule.max(6),
         }),
+        defineField({
+          name: 'primaryButton',
+          title: 'Primary Button',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'text',
+              title: 'Button Text',
+              type: 'string',
+              validation: Rule => Rule.required(),
+            }),
+            defineField({
+              name: 'link',
+              title: 'Button Link',
+              type: 'string',
+              description: 'The URL the button links to',
+              validation: Rule => Rule.required(),
+            }),
+          ],
+        }),
       ],
     }),
     defineField({
