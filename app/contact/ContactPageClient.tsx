@@ -3,7 +3,7 @@
 import React from "react"
 import { useState, useEffect } from "react"
 import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
+import Footer, { FooterData } from "@/components/footer"
 import PageHeader from "@/components/page-header"
 import { MapPin, Mail, Phone, Clock, Globe, Send, CheckCircle } from "lucide-react"
 import { motion } from "framer-motion"
@@ -18,6 +18,7 @@ import { client } from "@/sanity/lib/client"
 import { contactPageQuery } from "@/sanity/queries/contact"
 import LoadingUI from "@/components/loading-ui"
 import { usePageAnimations } from "@/hooks/use-page-animations"
+import { footerQuery } from "@/sanity/queries/footer"
 
 interface ContactData {
   pageHeader: {
@@ -62,6 +63,7 @@ export default function ContactPageClient() {
     phone: "",
     message: "",
   })
+  const [footerData, setFooterData] = useState<FooterData | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,7 +75,10 @@ export default function ContactPageClient() {
         }
         
         const result = await client.fetch(contactPageQuery, { language })
+        const footerResult = await client.fetch<FooterData>(footerQuery, { language })
+        
         setData(result)
+        setFooterData(footerResult)
       } catch (error) {
         console.error('Error fetching data:', error)
       } finally {
@@ -379,7 +384,7 @@ export default function ContactPageClient() {
           </div>
         </section>
 
-        <Footer />
+        {footerData && <Footer data={footerData} />}
       </main>}
     </React.Fragment>
   )

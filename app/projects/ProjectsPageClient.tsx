@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
+import Footer, { FooterData } from "@/components/footer"
 import PageHeader from "@/components/page-header"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -14,6 +14,7 @@ import LoadingUI from "@/components/loading-ui"
 import { useLanguage } from "@/contexts/language-context"
 import { client } from "@/sanity/lib/client"
 import { projectPageQuery } from "@/sanity/queries/projects"
+import { footerQuery } from "@/sanity/queries/footer"
 import { useInView } from "react-intersection-observer"
 
 interface Project {
@@ -38,6 +39,7 @@ interface ProjectsData {
     description: string
   }
   projects: Project[]
+  viewCta: string
   categories: string[]
   cta: {
     title: string
@@ -57,6 +59,7 @@ interface ProjectsData {
 
 export default function ProjectsPageClient() {
   const [data, setData] = useState<ProjectsData | null>(null)
+  const [footerData, setFooterData] = useState<FooterData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isChangingLanguage, setIsChangingLanguage] = useState(false)
   const [initialLoad, setInitialLoad] = useState(true)
@@ -78,7 +81,9 @@ export default function ProjectsPageClient() {
         }
         
         const result = await client.fetch(projectPageQuery, { language })
+        const footerResult = await client.fetch<FooterData>(footerQuery, { language })
         setData(result)
+        setFooterData(footerResult)
         setAllCategories(["All", ...result.categories])
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -209,7 +214,7 @@ export default function ProjectsPageClient() {
                           alt={project.title}
                           width={project.image.dimensions.width}
                           height={project.image.dimensions.height}
-                          className="w-full h-auto"
+                          className="w-full h-auto max-w-[300px] m-auto"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
                         <motion.div
@@ -247,7 +252,7 @@ export default function ProjectsPageClient() {
                         </div>
 
                         <motion.div className="flex items-center text-primary text-sm font-medium" whileHover={{ x: 5 }}>
-                          View Case Study
+                          {data.viewCta}
                           <motion.div
                             className="ml-2"
                             animate={{ x: [0, 5, 0] }}
@@ -339,7 +344,7 @@ export default function ProjectsPageClient() {
           </div>
         </section>
 
-        <Footer />
+        {footerData && <Footer data={footerData} />}
       </main>}
     </React.Fragment>
   )

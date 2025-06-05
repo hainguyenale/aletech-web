@@ -32,7 +32,11 @@ export const homeQuery = `*[_type == "home" && language == $language][0]{
     tagline,
     title,
     description,
-    features[]
+    features[],
+    primaryButton {
+      text,
+      link
+    }
   },
   solutions {
     title,

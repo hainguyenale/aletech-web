@@ -15,6 +15,7 @@ export const projectPageQuery = `*[_type == "projects"  && language == $language
     description,
     tags
   },
+  "viewCta": viewCta,
   categories,
   cta {
     title,
@@ -33,7 +34,7 @@ export const projectPageQuery = `*[_type == "projects"  && language == $language
 }`
 
 // Query for a single project by ID
-export const singleProjectQuery = `*[_type == "project" && id == $id][0]{
+export const singleProjectQuery = `*[_type == "project" && id == $id && language == $language][0]{
   "project": {
     id,
     title,
@@ -65,8 +66,26 @@ export const singleProjectQuery = `*[_type == "project" && id == $id][0]{
       value,
       description
     },
-    caseStudy,
     githubUrl,
-    liveUrl
+    liveUrl,
+    sectionTitles {
+      overview,
+      timeline,
+      teamSize,
+      client,
+      keyFeatures,
+      architecture,
+      challenges,
+      solutions,
+      technologies,
+      results,
+      keyMetrics
+    },
+    sectionIcons {
+      github,
+      externalLink,
+      listItem,
+      paragraph
+    }
   }
 }` 

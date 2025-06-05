@@ -6,7 +6,9 @@ import { projectSchema } from './project'
 import { investorsSchema } from './investors'
 import { contactSchema } from './contact'
 import { solutionsSchema, solutionSchema } from './solutions'
+import { footerSchema } from './footer'
+import { navbarSchema } from './navbar'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [homeSchema, aboutSchema, projectsSchema, projectSchema, investorsSchema, contactSchema, solutionsSchema, solutionSchema],
+  types: [homeSchema, aboutSchema, projectsSchema, projectSchema, investorsSchema, contactSchema, solutionsSchema, solutionSchema, footerSchema, navbarSchema],
 }

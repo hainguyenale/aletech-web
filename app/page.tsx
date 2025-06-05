@@ -1,159 +1,192 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { motion, useAnimation, useScroll, useTransform } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import Navbar from "@/components/navbar"
-import HeroSection from "@/components/hero-section"
-import ServicesSection from "@/components/services-section"
-import AboutSection from "@/components/about-section"
-import SolutionsSection from "@/components/solutions-section"
-import TestimonialsSection from "@/components/testimonials-section"
-import ContactSection from "@/components/contact-section"
-import Footer from "@/components/footer"
-import LoadingUI from "@/components/loading-ui"
-import { client } from "@/sanity/lib/client"
-import { homeQuery } from "@/sanity/queries/home"
-import { useLanguage } from "@/contexts/language-context"
+import { useEffect, useState } from "react";
+import { motion, useAnimation, useScroll, useTransform } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import Navbar from "@/components/navbar";
+import HeroSection from "@/components/hero-section";
+import ServicesSection from "@/components/services-section";
+import AboutSection from "@/components/about-section";
+import SolutionsSection from "@/components/solutions-section";
+import TestimonialsSection from "@/components/testimonials-section";
+import ContactSection from "@/components/contact-section";
+import Footer, { FooterData } from "@/components/footer";
+import LoadingUI from "@/components/loading-ui";
+import { client } from "@/sanity/lib/client";
+import { homeQuery } from "@/sanity/queries/home";
+import { footerQuery } from "@/sanity/queries/footer";
+import { useLanguage } from "@/contexts/language-context";
+import { SanityImage } from "./investors/InvestorsPageClient";
 
 interface HomeData {
   hero: {
-    tagline: string
+    tagline: string;
     heading: {
-      text: string
-      highlightedText: string
-    }
-    description: string
+      text: string;
+      highlightedText: string;
+    };
+    thumbnailImage: SanityImage;
+    videoUrl: string;
+    description: string;
     primaryButton: {
-      text: string
-      link: string
-    }
+      text: string;
+      link: string;
+    };
     secondaryButton: {
-      text: string
-      link: string
-    }
+      text: string;
+      link: string;
+    };
     stats: Array<{
-      number: string
-      label: string
-    }>
-  }
+      number: string;
+      label: string;
+    }>;
+  };
   services: {
-    title: string
-    description: string
+    title: string;
+    description: string;
     services: Array<{
-      icon: string
-      title: string
-      description: string
-    }>
-  }
+      icon: string;
+      title: string;
+      description: string;
+    }>;
+  };
   about: {
-    tagline: string
-    title: string
-    description: string
-    features: string[]
-  }
+    tagline: string;
+    title: string;
+    description: string;
+    features: string[];
+    primaryButton: {
+      text: string;
+      link: string;
+    };
+  };
   solutions: {
-    title: string
-    subtitle: string
+    title: string;
+    subtitle: string;
     solutionsList: Array<{
-      id: string
-      icon: string
-      label: string
-      title: string
-      description: string
-      features: string[]
+      id: string;
+      icon: string;
+      label: string;
+      title: string;
+      description: string;
+      features: string[];
       image: {
-        url: string
-      }
-      link: string
-    }>
-  }
+        url: string;
+      };
+      link: string;
+    }>;
+  };
   testimonials: {
-    title: string
-    description: string
+    title: string;
+    description: string;
     testimonials: Array<{
-      quote: string
-      name: string
-      title: string
-    }>
-  }
+      quote: string;
+      name: string;
+      title: string;
+    }>;
+  };
   contact: {
-    tagline: string
-    title: string
-    description: string
+    tagline: string;
+    title: string;
+    description: string;
     contactInfo: Array<{
-      type: string
-      title: string
-      value: string
-      additionalInfo?: string[]
-    }>
-  }
+      type: string;
+      title: string;
+      value: string;
+      additionalInfo?: string[];
+    }>;
+  };
 }
 
 export default function Home() {
   // 1. All useState hooks
-  const [data, setData] = useState<HomeData | null>(null)
-  const [isChangingLanguage, setIsChangingLanguage] = useState(false)
-  const [initialLoad, setInitialLoad] = useState(true)
-
+  const [data, setData] = useState<HomeData | null>(null);
+  const [footerData, setFooterData] = useState<FooterData | null>(null);
+  const [isChangingLanguage, setIsChangingLanguage] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
   // 2. All context hooks
-  const { language } = useLanguage()
+  const { language } = useLanguage();
 
   // 3. All scroll and animation hooks
-  const { scrollYProgress } = useScroll()
-  const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1])
+  const { scrollYProgress } = useScroll();
+  const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   // 4. Animation controls
-  const servicesControls = useAnimation()
-  const aboutControls = useAnimation()
-  const solutionsControls = useAnimation()
-  const testimonialsControls = useAnimation()
-  const contactControls = useAnimation()
+  const servicesControls = useAnimation();
+  const aboutControls = useAnimation();
+  const solutionsControls = useAnimation();
+  const testimonialsControls = useAnimation();
+  const contactControls = useAnimation();
 
   // 5. Intersection observer hooks
-  const [servicesRef, servicesInView] = useInView({ threshold: 0.1, triggerOnce: true })
-  const [aboutRef, aboutInView] = useInView({ threshold: 0.1, triggerOnce: true })
-  const [solutionsRef, solutionsInView] = useInView({ threshold: 0.1, triggerOnce: true })
-  const [testimonialsRef, testimonialsInView] = useInView({ threshold: 0.1, triggerOnce: true })
-  const [contactRef, contactInView] = useInView({ threshold: 0.1, triggerOnce: true })
+  const [servicesRef, servicesInView] = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+  const [aboutRef, aboutInView] = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+  const [solutionsRef, solutionsInView] = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+  const [testimonialsRef, testimonialsInView] = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+  const [contactRef, contactInView] = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
 
   // 6. Data fetching effect
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (!initialLoad) {
-          setIsChangingLanguage(true)
+          setIsChangingLanguage(true);
           // Add artificial delay for smoother transition
-          await new Promise(resolve => setTimeout(resolve, 400))
+          await new Promise((resolve) => setTimeout(resolve, 400));
         }
-        
-        const result = await client.fetch<HomeData>(homeQuery, { language })
-        setData(result)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setIsChangingLanguage(false)
-        setInitialLoad(false)
-      }
-    }
 
-    fetchData()
-  }, [language, initialLoad])
+        const result = await client.fetch<HomeData>(homeQuery, { language });
+        const footerResult = await client.fetch<FooterData>(footerQuery, {
+          language,
+        });
+
+        setData(result);
+        setFooterData(footerResult);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsChangingLanguage(false);
+        setInitialLoad(false);
+      }
+    };
+
+    fetchData();
+  }, [language, initialLoad]);
 
   // 7. Animation effects
   useEffect(() => {
-    if (servicesInView) servicesControls.start("visible")
-    if (aboutInView) aboutControls.start("visible")
-    if (solutionsInView) solutionsControls.start("visible")
-    if (testimonialsInView) testimonialsControls.start("visible")
-    if (contactInView) contactControls.start("visible")
+    if (servicesInView) servicesControls.start("visible");
+    if (aboutInView) aboutControls.start("visible");
+    if (solutionsInView) solutionsControls.start("visible");
+    if (testimonialsInView) testimonialsControls.start("visible");
+    if (contactInView) contactControls.start("visible");
   }, [
-    servicesInView, servicesControls,
-    aboutInView, aboutControls,
-    solutionsInView, solutionsControls,
-    testimonialsInView, testimonialsControls,
-    contactInView, contactControls,
-  ])
+    servicesInView,
+    servicesControls,
+    aboutInView,
+    aboutControls,
+    solutionsInView,
+    solutionsControls,
+    testimonialsInView,
+    testimonialsControls,
+    contactInView,
+    contactControls,
+  ]);
 
   // Animation variants
   const sectionVariants = {
@@ -167,51 +200,79 @@ export default function Home() {
         staggerChildren: 0.2,
       },
     },
-  }
+  };
 
   if (!data) {
-    return null
+    return null;
   }
 
   return (
     <>
       <LoadingUI isVisible={isChangingLanguage} />
-      
-      {!isChangingLanguage && <main className="min-h-screen bg-background text-foreground">
-        <Navbar />
 
-        <HeroSection data={data.hero} />
+      {!isChangingLanguage && (
+        <main className="min-h-screen bg-background text-foreground">
+          <Navbar />
 
-        <motion.div ref={servicesRef} initial="hidden" animate={servicesControls} variants={sectionVariants}>
-          <ServicesSection data={data.services} />
-        </motion.div>
+          <HeroSection data={data.hero} />
 
-        <motion.div ref={aboutRef} initial="hidden" animate={aboutControls} variants={sectionVariants}>
-          <AboutSection data={data.about} />
-        </motion.div>
+          <motion.div
+            ref={servicesRef}
+            initial="hidden"
+            animate={servicesControls}
+            variants={sectionVariants}
+          >
+            <ServicesSection data={data.services} />
+          </motion.div>
 
-        <motion.div ref={solutionsRef} initial="hidden" animate={solutionsControls} variants={sectionVariants}>
-          <SolutionsSection data={{
-            title: data.solutions.title,
-            description: data.solutions.subtitle,
-            solutions: data.solutions.solutionsList.map(solution => ({
-              ...solution,
-              image: solution.image.url
-            }))
-          }} />
-        </motion.div>
+          <motion.div
+            ref={aboutRef}
+            initial="hidden"
+            animate={aboutControls}
+            variants={sectionVariants}
+          >
+            <AboutSection data={data.about} />
+          </motion.div>
 
-        <motion.div ref={testimonialsRef} initial="hidden" animate={testimonialsControls} variants={sectionVariants}>
-          <TestimonialsSection data={data.testimonials} />
-        </motion.div>
+          <motion.div
+            ref={solutionsRef}
+            initial="hidden"
+            animate={solutionsControls}
+            variants={sectionVariants}
+          >
+            <SolutionsSection
+              data={{
+                title: data.solutions.title,
+                description: data.solutions.subtitle,
+                solutions: data.solutions.solutionsList.map((solution) => ({
+                  ...solution,
+                  image: solution.image.url,
+                })),
+              }}
+            />
+          </motion.div>
 
-        <motion.div ref={contactRef} initial="hidden" animate={contactControls} variants={sectionVariants}>
-          <ContactSection data={data.contact} />
-        </motion.div>
+          <motion.div
+            ref={testimonialsRef}
+            initial="hidden"
+            animate={testimonialsControls}
+            variants={sectionVariants}
+          >
+            <TestimonialsSection data={data.testimonials} />
+          </motion.div>
 
-        <Footer />
-      </main>}
+          <motion.div
+            ref={contactRef}
+            initial="hidden"
+            animate={contactControls}
+            variants={sectionVariants}
+          >
+            <ContactSection data={data.contact} />
+          </motion.div>
+
+          {footerData && <Footer data={footerData} />}
+        </main>
+      )}
     </>
-  )
+  );
 }
-

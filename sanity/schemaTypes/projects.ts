@@ -43,6 +43,13 @@ export const projectsSchema = defineType({
                 }
             ],
         }),
+        // View CTA
+        defineField({
+            name: "viewCta",
+            title: "View CTA",
+            type: "string",
+            validation: (Rule) => Rule.required(),
+        }),
         // Categories
         defineField({
             name: "categories",

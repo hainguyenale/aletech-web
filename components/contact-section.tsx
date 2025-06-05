@@ -69,7 +69,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
     <section id="contact" className="py-20 bg-background">
       <div className="container px-4 mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div>
+          <div >
             <div className="inline-block mb-6">
               <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-sm">
                 <span className="text-primary font-medium">{data.tagline}</span>
@@ -103,7 +103,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
             </div>
           </div>
 
-          <div className="relative">
+          {/* <div className="relative">
             <div className="absolute -inset-4 bg-primary/10 rounded-xl filter blur-xl opacity-50"></div>
             <div className="relative bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 md:p-8">
               <h3 className="text-xl font-bold mb-6">Send Us a Message</h3>
@@ -168,7 +168,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                 </form>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

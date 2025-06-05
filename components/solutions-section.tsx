@@ -86,12 +86,6 @@ export default function SolutionsSection({ data }: SolutionsSectionProps) {
                       ))}
                     </div>
 
-                    <Link href={`/solutions/${solution.id}`}>
-                      <Button className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white mt-4">
-                        Explore Solutions
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
                   </div>
 
                   <motion.div

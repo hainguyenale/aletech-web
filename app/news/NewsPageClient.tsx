@@ -1,7 +1,7 @@
 "use client"
 
 import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
+import Footer, { FooterData } from "@/components/footer"
 import PageHeader from "@/components/page-header"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -11,10 +11,28 @@ import { motion } from "framer-motion"
 import FadeIn from "@/components/animations/fade-in"
 import StaggerContainer from "@/components/animations/stagger-container"
 import StaggerItem from "@/components/animations/stagger-item"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useLanguage } from "@/contexts/language-context"
+import { client } from "@/sanity/lib/client"
+import { footerQuery } from "@/sanity/queries/footer"
 
 export default function NewsPageClient() {
   const [activeCategory, setActiveCategory] = useState("All")
+  const [footerData, setFooterData] = useState<FooterData | null>(null)
+  const { language } = useLanguage()
+
+  useEffect(() => {
+    const fetchFooterData = async () => {
+      try {
+        const footerResult = await client.fetch<FooterData>(footerQuery, { language })
+        setFooterData(footerResult)
+      } catch (error) {
+        console.error('Error fetching footer data:', error)
+      }
+    }
+
+    fetchFooterData()
+  }, [language])
 
   const featuredNews = {
     id: "ai-partnership",
@@ -359,7 +377,7 @@ export default function NewsPageClient() {
         </div>
       </section>
 
-      <Footer />
+      {footerData && <Footer data={footerData} />}
     </main>
   )
 }

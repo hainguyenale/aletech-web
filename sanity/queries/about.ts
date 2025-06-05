@@ -13,16 +13,26 @@ export const aboutPageQuery = `*[_type == "about"  && language == $language][0]{
       link
     }
   },
-  values[] {
+  values {
+   title,
+    tagline,
+    description,
+    values[] {
+      title,
+      description,
+      icon
+    }
+  },
+  members{
+    tagline,
     title,
     description,
-    icon
-  },
-  teamMembers[] {
+    teamMembers[] {
     name,
     position,
     image,
     bio
+    }
   },
   stats[] {
     value,

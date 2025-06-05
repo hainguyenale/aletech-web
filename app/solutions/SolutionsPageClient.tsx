@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
+import Footer, { FooterData } from "@/components/footer"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
@@ -13,6 +13,7 @@ import LoadingUI from "@/components/loading-ui"
 import { useLanguage } from "@/contexts/language-context"
 import { client } from "@/sanity/lib/client"
 import { solutionsPageQuery } from "@/sanity/queries/solutions"
+import { footerQuery } from "@/sanity/queries/footer"
 import PageHeader from "@/components/page-header"
 
 interface Project {
@@ -71,6 +72,7 @@ interface SolutionsData {
 
 export default function SolutionsPageClient() {
     const [data, setData] = useState<SolutionsData | null>(null)
+    const [footerData, setFooterData] = useState<FooterData | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [isChangingLanguage, setIsChangingLanguage] = useState(false)
     const [initialLoad, setInitialLoad] = useState(true)
@@ -96,7 +98,9 @@ export default function SolutionsPageClient() {
                 }
 
                 const result = await client.fetch(solutionsPageQuery, { language })
+                const footerResult = await client.fetch<FooterData>(footerQuery, { language })
                 setData(result)
+                setFooterData(footerResult)
             } catch (error) {
                 console.error('Error fetching data:', error)
             } finally {
@@ -269,7 +273,7 @@ export default function SolutionsPageClient() {
                     </div>
                 </section>
 
-                <Footer />
+                {footerData && <Footer data={footerData} />}
             </main>}
 
         </React.Fragment>

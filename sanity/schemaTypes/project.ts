@@ -9,7 +9,7 @@ export const projectSchema = defineType({
             name: 'language',
             type: 'string',
             readOnly: true,
-            hidden: true
+            hidden: true,
         }),
         defineField({
             name: "id",
@@ -181,12 +181,6 @@ export const projectSchema = defineType({
             validation: (Rule) => Rule.required().min(1),
         }),
         defineField({
-            name: "caseStudy",
-            title: "Case Study",
-            type: "text",
-            validation: (Rule) => Rule.required(),
-        }),
-        defineField({
             name: "githubUrl",
             title: "GitHub URL",
             type: "url",
@@ -196,10 +190,133 @@ export const projectSchema = defineType({
             title: "Live URL",
             type: "url",
         }),
+        defineField({
+            name: "sectionTitles",
+            title: "Section Titles",
+            type: "object",
+            fields: [
+                {
+                    name: "overview",
+                    title: "Project Overview",
+                    type: "string",
+                    initialValue: "Project Overview",
+                },
+                {
+                    name: "timeline",
+                    title: "Timeline",
+                    type: "string",
+                    initialValue: "Timeline",
+                },
+                {
+                    name: "teamSize",
+                    title: "Team Size",
+                    type: "string",
+                    initialValue: "Team Size",
+                },
+                {
+                    name: "client",
+                    title: "Client",
+                    type: "string",
+                    initialValue: "Client",
+                },
+                {
+                    name: "keyFeatures",
+                    title: "Key Features",
+                    type: "string",
+                    initialValue: "Key Features",
+                },
+                {
+                    name: "architecture",
+                    title: "Architecture",
+                    type: "string",
+                    initialValue: "Architecture",
+                },
+                {
+                    name: "challenges",
+                    title: "Challenges",
+                    type: "string",
+                    initialValue: "Challenges",
+                },
+                {
+                    name: "solutions",
+                    title: "Solutions",
+                    type: "string",
+                    initialValue: "Solutions",
+                },
+                {
+                    name: "technologies",
+                    title: "Technologies",
+                    type: "string",
+                    initialValue: "Technologies",
+                },
+                {
+                    name: "results",
+                    title: "Results",
+                    type: "string",
+                    initialValue: "Results",
+                },
+                {
+                    name: "keyMetrics",
+                    title: "Key Metrics",
+                    type: "string",
+                    initialValue: "Key Metrics",
+                }
+            ],
+            initialValue: {
+                overview: "Project Overview",
+                timeline: "Timeline",
+                teamSize: "Team Size",
+                client: "Client",
+                keyFeatures: "Key Features",
+                architecture: "Architecture",
+                challenges: "Challenges",
+                solutions: "Solutions",
+                technologies: "Technologies",
+                results: "Results",
+                keyMetrics: "Key Metrics"
+            }
+        }),
+        defineField({
+            name: "sectionIcons",
+            title: "Section Icons",
+            type: "object",
+            fields: [
+                {
+                    name: "github",
+                    title: "GitHub Icon",
+                    type: "string",
+                    initialValue: "Github",
+                },
+                {
+                    name: "externalLink",
+                    title: "External Link Icon",
+                    type: "string",
+                    initialValue: "ExternalLink",
+                },
+                {
+                    name: "listItem",
+                    title: "List Item Icon",
+                    type: "string",
+                    initialValue: "Sun",
+                },
+                {
+                    name: "paragraph",
+                    title: "Paragraph Icon",
+                    type: "string",
+                    initialValue: "Document",
+                }
+            ],
+            initialValue: {
+                github: "Github",
+                externalLink: "ExternalLink",
+                listItem: "Sun",
+                paragraph: "Document"
+            }
+        }),
     ],
     preview: {
         select: {
-            title: 'title',  // your title field
+            title: 'title',
             language: 'language'
         },
         prepare(selection) {

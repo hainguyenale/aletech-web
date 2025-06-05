@@ -9,6 +9,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { client } from "@/sanity/lib/client"
 import { homeQuery } from "@/sanity/queries/home"
+import OrbitLogo from "@/components/ui/orbit-logo"
+
 
 interface HeroSectionProps {
   data: {
@@ -175,7 +177,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
             transition={{ duration: 1, delay: 0.5 }}
           >
             <motion.div
-              className="absolute -left-20 -top-20 w-64 h-64 bg-primary/20 rounded-full filter blur-3xl"
+              className="absolute -right-20 -top-20 w-64 h-64 bg-primary/20 rounded-full filter blur-3xl"
               animate={{
                 opacity: [0.5, 0.7, 0.5],
                 scale: [1, 1.1, 1],
@@ -187,7 +189,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
               }}
             />
             <motion.div
-              className="absolute -right-10 -bottom-10 w-64 h-64 bg-primary/20 rounded-full filter blur-3xl"
+              className="absolute -left-10 -bottom-10 w-64 h-64 bg-primary/20 rounded-full filter blur-3xl"
               animate={{
                 opacity: [0.7, 0.5, 0.7],
                 scale: [1, 1.1, 1],
@@ -201,59 +203,11 @@ export default function HeroSection({ data }: HeroSectionProps) {
             />
 
             <motion.div
-              className="relative bg-card/40 backdrop-blur-sm border border-border rounded-2xl p-6 shadow-xl"
-              whileHover={{ y: -5 }}
+              className="relative bg-card/40 backdrop-blur-sm rounded-2xl p-6 shadow-xl"
+              // whileHover={{ y: -5 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="aspect-square w-full relative">
-                {/* Rotating Rectangles Layer */}
-                <motion.div
-                  className="absolute inset-0 flex items-center justify-center"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 60, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                >
-                  <div className="w-3/4 h-3/4 relative">
-                    <motion.div
-                      className="w-full h-full border-[3px] border-primary rotate-45 absolute"
-                      animate={{ rotate: [45, 225, 45] }}
-                      transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                    />
-                    <motion.div
-                      className="w-full h-full border-[3px] border-primary/50 rotate-[30deg] absolute"
-                      animate={{ rotate: [30, 210, 30] }}
-                      transition={{ duration: 25, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                    />
-                    <motion.div
-                      className="w-full h-full border-[3px] border-primary/30 rotate-[15deg] absolute"
-                      animate={{ rotate: [15, 195, 15] }}
-                      transition={{ duration: 30, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                    />
-                  </div>
-                </motion.div>
-
-                {/* Logo Layer */}
-                <div className="absolute inset-0 flex items-center justify-center z-10">
-                  <motion.div
-                    className="w-1/3 h-1/3"
-                    animate={{ 
-                      scale: [1, 1.1, 1]
-                    }}
-                    transition={{ 
-                      duration: 3,
-                      repeat: Number.POSITIVE_INFINITY,
-                      repeatType: "reverse"
-                    }}
-                  >
-                    <Image
-                      src="/logos/aletech.svg"
-                      alt="Aletech Logo"
-                      width={100}
-                      height={100}
-                      className="w-full h-full object-contain"
-                    />
-                  </motion.div>
-                </div>
-              </div>
+              <OrbitLogo/>
 
               <div className="mt-6 space-y-4">
                 <motion.div

@@ -1,14 +1,33 @@
 "use client"
 
 import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
+import Footer, { FooterData } from "@/components/footer"
 import PageHeader from "@/components/page-header"
 import { motion } from "framer-motion"
 import { usePageAnimations } from "@/hooks/use-page-animations"
 import { Shield, Lock, FileText, UserCheck, AlertCircle, Mail } from "lucide-react"
+import { useState, useEffect } from "react"
+import { useLanguage } from "@/contexts/language-context"
+import { client } from "@/sanity/lib/client"
+import { footerQuery } from "@/sanity/queries/footer"
 
 export default function PrivacyPageClient() {
   const { controls, hasAnimated } = usePageAnimations()
+  const [footerData, setFooterData] = useState<FooterData | null>(null)
+  const { language } = useLanguage()
+
+  useEffect(() => {
+    const fetchFooterData = async () => {
+      try {
+        const footerResult = await client.fetch<FooterData>(footerQuery, { language })
+        setFooterData(footerResult)
+      } catch (error) {
+        console.error('Error fetching footer data:', error)
+      }
+    }
+
+    fetchFooterData()
+  }, [language])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -214,7 +233,7 @@ export default function PrivacyPageClient() {
         </motion.div>
       </section>
 
-      <Footer />
+      {footerData && <Footer data={footerData} />}
     </main>
   )
 } 
