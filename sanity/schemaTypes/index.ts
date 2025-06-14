@@ -8,7 +8,8 @@ import { contactSchema } from './contact'
 import { solutionsSchema, solutionSchema } from './solutions'
 import { footerSchema } from './footer'
 import { navbarSchema } from './navbar'
+import metadataSchema from './metadata'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [homeSchema, aboutSchema, projectsSchema, projectSchema, investorsSchema, contactSchema, solutionsSchema, solutionSchema, footerSchema, navbarSchema],
+  types: [homeSchema, aboutSchema, projectsSchema, projectSchema, investorsSchema, contactSchema, solutionsSchema, solutionSchema, footerSchema, navbarSchema, metadataSchema],
 }

@@ -114,7 +114,7 @@ const formatFileSize = (bytes: number) => {
 };
 
 // Helper function to format date
-const formatDate = (dateString: string,locale:string) => {
+const formatDate = (dateString: string, locale: string) => {
   return new Date(dateString).toLocaleString(locale, {
     year: "numeric",
     month: "long",
@@ -317,7 +317,7 @@ export default function InvestorsPageClient() {
                               {report.title}
                             </h3>
                             <p className="text-sm text-muted-foreground">
-                              {formatDate(report.date,language)}
+                              {formatDate(report.date, language)}
                             </p>
                           </div>
                           <motion.a
@@ -382,10 +382,12 @@ export default function InvestorsPageClient() {
                       {data.upcomingEvents.title}
                     </h2>
 
-                    <p className="text-muted-foreground mb-8">
-                      {data.upcomingEvents.description}
-                    </p>
-
+                    <p
+                      className="text-muted-foreground mb-8"
+                      dangerouslySetInnerHTML={{
+                        __html: data.upcomingEvents.description,
+                      }}
+                    />
                     <StaggerContainer className="space-y-6">
                       {data.upcomingEvents.events.map((event, index) => (
                         <StaggerItem key={index}>
@@ -407,7 +409,11 @@ export default function InvestorsPageClient() {
                               >
                                 <Calendar className="h-6 w-6 text-primary mb-1" />
                                 <div className="text-xs text-primary font-medium">
-                                  {formatDate(event.date, language).split(" ")[0]}
+                                  {
+                                    formatDate(event.date, language).split(
+                                      " "
+                                    )[0]
+                                  }
                                 </div>
                               </motion.div>
 
@@ -416,7 +422,8 @@ export default function InvestorsPageClient() {
                                   {event.title}
                                 </h3>
                                 <p className="text-sm text-muted-foreground mb-2">
-                                  {formatDate(event.date, language)} | {event.time}
+                                  {formatDate(event.date, language)} |{" "}
+                                  {event.time}
                                 </p>
                                 <p className="text-sm text-muted-foreground">
                                   {event.location}

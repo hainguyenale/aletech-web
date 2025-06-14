@@ -45,6 +45,35 @@ export const projectSchema = defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
+            name: "screenshots",
+            title: "Screenshots",
+            type: "array",
+            of: [
+                {
+                    type: "image",
+                    options: {
+                        hotspot: true,
+                        metadata: ['dimensions', 'lqip'],
+                        storeOriginalFilename: true,
+                    },
+                    fields: [
+                        {
+                            name: 'alt',
+                            type: 'string',
+                            title: 'Alternative text',
+                            description: 'Important for SEO and accessibility.',
+                        },
+                        {
+                            name: 'caption',
+                            type: 'string',
+                            title: 'Caption',
+                        }
+                    ]
+                }
+            ],
+            validation: (Rule) => Rule.max(10),
+        }),
+        defineField({
             name: "description",
             title: "Short Description",
             type: "text",
@@ -91,7 +120,7 @@ export const projectSchema = defineType({
                     name: "overview",
                     title: "Architecture Overview",
                     type: "text",
-                    validation: (Rule) => Rule.required(),
+                    // validation: (Rule) => Rule.required(),
                 },
                 {
                     name: "components",
@@ -105,21 +134,21 @@ export const projectSchema = defineType({
                                     name: "name",
                                     title: "Component Name",
                                     type: "string",
-                                    validation: (Rule) => Rule.required(),
+                                    // validation: (Rule) => Rule.required(),
                                 },
                                 {
                                     name: "description",
                                     title: "Component Description",
                                     type: "text",
-                                    validation: (Rule) => Rule.required(),
+                                    // validation: (Rule) => Rule.required(),
                                 }
                             ]
                         }
                     ],
-                    validation: (Rule) => Rule.required().min(1),
+                    // validation: (Rule) => Rule.required().min(1),
                 }
             ],
-            validation: (Rule) => Rule.required(),
+            // validation: (Rule) => Rule.required(),
         }),
         defineField({
             name: "challenges",
@@ -260,6 +289,12 @@ export const projectSchema = defineType({
                     title: "Key Metrics",
                     type: "string",
                     initialValue: "Key Metrics",
+                },
+                {
+                    name: "screenshots",
+                    title: "Screenshots",
+                    type: "string",
+                    initialValue: "Screenshots",
                 }
             ],
             initialValue: {
@@ -273,7 +308,8 @@ export const projectSchema = defineType({
                 solutions: "Solutions",
                 technologies: "Technologies",
                 results: "Results",
-                keyMetrics: "Key Metrics"
+                keyMetrics: "Key Metrics",
+                screenshots: "Screenshots"
             }
         }),
         defineField({

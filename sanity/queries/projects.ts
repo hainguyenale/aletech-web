@@ -44,6 +44,12 @@ export const singleProjectQuery = `*[_type == "project" && id == $id && language
       url,
       "dimensions": metadata.dimensions
     },
+    "screenshots": screenshots[]{
+      "url": asset->url,
+      "dimensions": asset->metadata.dimensions,
+      "alt": alt,
+      "caption": caption
+    },
     description,
     longDescription,
     tags,
@@ -79,7 +85,8 @@ export const singleProjectQuery = `*[_type == "project" && id == $id && language
       solutions,
       technologies,
       results,
-      keyMetrics
+      keyMetrics,
+      screenshots
     },
     sectionIcons {
       github,

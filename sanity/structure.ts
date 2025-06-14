@@ -15,4 +15,5 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('solution').title('Solution'),
       S.documentTypeListItem('footer').title('Footer'),
       S.documentTypeListItem('navbar').title('Navbar'),
+      S.documentTypeListItem('metadata').title('Metadata'),
     ])

@@ -51,6 +51,7 @@ interface Project {
   githubUrl?: string
   liveUrl?: string
   image: Image
+  screenshots?: Image[]
   timeline: string
   teamSize: string
   client: string
@@ -68,12 +69,13 @@ interface Project {
     teamSize: string
     client: string
     keyFeatures: string
-    architecture: string
+    architecture?: string
     challenges: string
     solutions: string
     technologies: string
     results: string
     keyMetrics: string
+    screenshots: string
   }
   sectionIcons: {
     github: string
@@ -271,7 +273,7 @@ export default function ProjectPageClient({ id }: ProjectPageClientProps) {
               )}
 
               {/* Architecture */}
-              {project.architecture && (
+              {/* {project.architecture && (
                 <motion.div variants={itemVariants} className="mb-16">
                   <h2 className="text-2xl font-bold mb-6">{project.sectionTitles.architecture}</h2>
                   <motion.div
@@ -291,7 +293,7 @@ export default function ProjectPageClient({ id }: ProjectPageClientProps) {
                     </div>
                   </motion.div>
                 </motion.div>
-              )}
+              )} */}
 
               {/* Challenges & Solutions */}
               <motion.div variants={itemVariants} className="mb-16">
@@ -377,6 +379,30 @@ export default function ProjectPageClient({ id }: ProjectPageClientProps) {
                         <h3 className="text-xl font-bold text-primary mb-2">{metric.value}</h3>
                         <h4 className="text-lg font-medium mb-2">{metric.label}</h4>
                         <p className="text-muted-foreground text-sm">{metric.description}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Screenshots */}
+              {project.screenshots && project.screenshots.length > 0 && (
+                <motion.div variants={itemVariants} className="mb-16">
+                  <h2 className="text-2xl font-bold mb-6">{project.sectionTitles.screenshots}</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {project.screenshots.map((screenshot, index) => (
+                      <motion.div
+                        key={index}
+                        whileHover={{ scale: 1.02 }}
+                        className="relative aspect-video rounded-xl overflow-hidden bg-card/30 border border-border hover:border-primary/50 transition-all duration-300"
+                      >
+                        <Image
+                          src={screenshot.url}
+                          alt={`${project.title} screenshot ${index + 1}`}
+                          width={screenshot.dimensions.width}
+                          height={screenshot.dimensions.height}
+                          className="object-cover w-full h-full"
+                        />
                       </motion.div>
                     ))}
                   </div>

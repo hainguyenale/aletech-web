@@ -101,7 +101,7 @@ export default function SolutionsSection({ data }: SolutionsSectionProps) {
                         alt={solution.title}
                         width={300}
                         height={300}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         priority
                       />
                       <div className="absolute inset-0 bg-gradient-to-tr from-background/80 via-background/50 to-transparent"></div>
