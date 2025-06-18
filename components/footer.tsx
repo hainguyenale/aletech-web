@@ -10,7 +10,7 @@ export interface FooterData {
       url: string
     }>
   }
-  solutionsLinks: Array<{
+  solutionsLinks?: Array<{
     title: string
     url: string
   }>
@@ -81,7 +81,7 @@ export default function Footer({ data }: FooterProps) {
             </div>
           </div>
 
-          <div>
+          {/* <div>
             <h3 className="text-lg font-semibold mb-4">Solutions</h3>
             <ul className="space-y-2">
               {data.solutionsLinks.map((link, index) => (
@@ -92,7 +92,7 @@ export default function Footer({ data }: FooterProps) {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           <div>
             <h3 className="text-lg font-semibold mb-4">Company</h3>
