@@ -187,7 +187,7 @@ export default function Navbar() {
 
         <nav className="hidden md:flex items-center space-x-6">
           {navbarData.navLinks
-            .filter(link => link.href !== '/investors' || userCountry !== 'VN')
+            .filter(link => link.href !== '/investors' || userCountry === 'VN')
             .map((link, index) => (
             <motion.div
               key={link.href}
@@ -330,7 +330,7 @@ export default function Navbar() {
             <div className="container py-4 space-y-4">
               <nav className="flex flex-col space-y-4">
                 {navbarData.navLinks
-                  .filter(link => link.href !== '/investors' || userCountry !== 'VN')
+                  .filter(link => link.href !== '/investors' || userCountry === 'VN')
                   .map((link, index) => (
                   <motion.div
                     key={link.href}
