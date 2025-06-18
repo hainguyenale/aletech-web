@@ -77,13 +77,13 @@ export const investorsSchema = defineType({
                   name: 'growth',
                   title: 'YoY Growth',
                   type: 'string',
-                  validation: Rule => Rule.required(),
+                  // validation: Rule => Rule.required(),
                 }),
                 defineField({
                   name: 'progressPercentage',
                   title: 'Progress Bar Percentage',
                   type: 'number',
-                  validation: Rule => Rule.required().min(0).max(100),
+                  // validation: Rule => Rule.required().min(0).max(100),
                 }),
                 defineField({
                   name: 'icon',

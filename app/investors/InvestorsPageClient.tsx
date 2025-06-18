@@ -52,8 +52,8 @@ interface InvestorsData {
     metrics: {
       title: string;
       value: string;
-      growth: string;
-      progressPercentage: number;
+      growth?: string;
+      progressPercentage?: number;
       icon: string;
     }[];
   };
@@ -249,7 +249,7 @@ export default function InvestorsPageClient() {
                       >
                         {metric.value}
                       </motion.div>
-                      <div className="text-sm text-primary">
+                      {/* <div className="text-sm text-primary">
                         {metric.growth}
                       </div>
                       <motion.div
@@ -269,7 +269,7 @@ export default function InvestorsPageClient() {
                           viewport={{ once: true }}
                           transition={{ duration: 0.8, delay: 0.4 }}
                         ></motion.div>
-                      </motion.div>
+                      </motion.div> */}
                     </motion.div>
                   </StaggerItem>
                 ))}
