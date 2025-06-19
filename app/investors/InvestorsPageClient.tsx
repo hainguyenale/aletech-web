@@ -538,7 +538,7 @@ export default function InvestorsPageClient() {
                 </div>
               </FadeIn>
 
-              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8 mx-auto">
                 {data.boardOfDirectors.members.map((member, index) => (
                   <StaggerItem key={index}>
                     <motion.div
