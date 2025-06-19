@@ -1,6 +1,9 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import { Facebook, Linkedin, Mail } from "lucide-react"
+import { useState, useEffect } from "react"
 
 export interface FooterData {
   companyInfo: {
@@ -32,6 +35,20 @@ interface FooterProps {
 
 export default function Footer({ data }: FooterProps) {
   const currentYear = new Date().getFullYear()
+  const [userCountry, setUserCountry] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchCountry = async () => {
+      try {
+        const response = await fetch('/api/country')
+        const data = await response.json()
+        setUserCountry(data.country)
+      } catch (error) {
+        console.error('Error fetching country:', error)
+      }
+    }
+    fetchCountry()
+  }, [])
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
@@ -56,7 +73,7 @@ export default function Footer({ data }: FooterProps) {
   return (
     <footer className="bg-background border-t border-border">
       <div className="container px-4 py-12 mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
               <Image src="/logos/aletech.svg" alt="Aletech Logo" width={40} height={40} className="h-10 w-auto" />
@@ -97,7 +114,9 @@ export default function Footer({ data }: FooterProps) {
           <div>
             <h3 className="text-lg font-semibold mb-4">Company</h3>
             <ul className="space-y-2">
-              {data.companyLinks.map((link, index) => (
+              {data.companyLinks
+                .filter(link => link.url !== '/investors' || userCountry === 'VN')
+                .map((link, index) => (
                 <li key={index}>
                   <Link href={link.url} className="text-muted-foreground hover:text-primary transition-colors">
                     {link.title}
