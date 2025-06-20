@@ -368,12 +368,12 @@ export default function ContactPageClient() {
                               {office.hours}
                             </p>
                           </div>
-                          <div className="flex items-start gap-2 group">
+                          {/* <div className="flex items-start gap-2 group">
                             <Globe className="h-4 w-4 text-primary mt-0.5 group-hover:scale-110 transition-transform duration-300" />
                             <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                               Local Time Zone
                             </p>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>

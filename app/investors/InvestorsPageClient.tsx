@@ -481,12 +481,11 @@ export default function InvestorsPageClient() {
                               repeat: Number.POSITIVE_INFINITY,
                               repeatType: "reverse",
                             }}
-                            onClick={() =>
-                              window.open(
-                                data.upcomingEvents.presentation.file.url,
-                                "_blank"
-                              )
-                            }
+                            onClick={() => {
+                              if (data.upcomingEvents.presentation.file?.url) {
+                                window.open(data.upcomingEvents.presentation.file.url, '_blank');
+                              }
+                            }}
                           >
                             <div className="w-16 h-16 rounded-full bg-primary/30 flex items-center justify-center">
                               <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
@@ -495,7 +494,7 @@ export default function InvestorsPageClient() {
                                   fill="none"
                                   className="w-6 h-6 text-white"
                                 >
-                                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                               </div>
                             </div>
@@ -538,7 +537,7 @@ export default function InvestorsPageClient() {
                 </div>
               </FadeIn>
 
-              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(0,250px))] gap-8 mx-auto">
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(0,250px))] gap-8 mx-auto justify-center">
                 {data.boardOfDirectors.members.map((member, index) => (
                   <StaggerItem key={index}>
                     <motion.div
