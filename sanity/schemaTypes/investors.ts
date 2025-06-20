@@ -249,9 +249,9 @@ export const investorsSchema = defineType({
               validation: Rule => Rule.required(),
             }),
             defineField({
-              name: 'videoUrl',
-              title: 'Video URL',
-              type: 'url',
+              name: 'file',
+              title: 'Presentation File',
+              type: 'file',
               validation: Rule => Rule.required(),
             }),
           ],

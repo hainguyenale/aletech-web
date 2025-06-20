@@ -82,7 +82,7 @@ interface InvestorsData {
       title: string;
       description: string;
       thumbnailImage: SanityImage;
-      videoUrl: string;
+      file: SanityFile;
     };
   };
   boardOfDirectors: {
@@ -483,7 +483,7 @@ export default function InvestorsPageClient() {
                             }}
                             onClick={() =>
                               window.open(
-                                data.upcomingEvents.presentation.videoUrl,
+                                data.upcomingEvents.presentation.file.url,
                                 "_blank"
                               )
                             }
@@ -495,7 +495,7 @@ export default function InvestorsPageClient() {
                                   fill="none"
                                   className="w-6 h-6 text-white"
                                 >
-                                  <path d="M8 5v14l11-7z" fill="currentColor" />
+                                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                               </div>
                             </div>
@@ -538,7 +538,7 @@ export default function InvestorsPageClient() {
                 </div>
               </FadeIn>
 
-              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8 mx-auto">
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(0,250px))] gap-8 mx-auto">
                 {data.boardOfDirectors.members.map((member, index) => (
                   <StaggerItem key={index}>
                     <motion.div

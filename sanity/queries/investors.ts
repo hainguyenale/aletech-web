@@ -49,7 +49,11 @@ export const investorsPageQuery = `*[_type == "investors"  && language == $langu
           dimensions
         }
       },
-      videoUrl
+      "file": file.asset->{
+        url,
+        size,
+        originalFilename
+      }
     }
   },
   boardOfDirectors {
