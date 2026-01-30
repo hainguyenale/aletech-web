@@ -20,7 +20,7 @@ import { motion } from "framer-motion";
 import FadeIn from "@/components/animations/fade-in";
 import StaggerContainer from "@/components/animations/stagger-container";
 import StaggerItem from "@/components/animations/stagger-item";
-import { useLanguage } from "@/contexts/language-context";
+import { useLang } from "@/hooks/use-lang";
 import { client } from "@/sanity/lib/client";
 import { aboutPageQuery } from "@/sanity/queries/about";
 import { footerQuery } from "@/sanity/queries/footer";
@@ -76,7 +76,7 @@ export default function AboutPageClient() {
   const [data, setData] = useState<AboutData | null>(null);
   const [isChangingLanguage, setIsChangingLanguage] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const { language } = useLanguage();
+  const language = useLang();
   const { controls, isClient } = usePageAnimations();
   const [footerData, setFooterData] = useState<FooterData | null>(null);
 

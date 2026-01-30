@@ -13,7 +13,7 @@ import StaggerItem from "@/components/animations/stagger-item"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { useLanguage } from "@/contexts/language-context"
+import { useLang } from "@/hooks/use-lang"
 import { client } from "@/sanity/lib/client"
 import { contactPageQuery } from "@/sanity/queries/contact"
 import LoadingUI from "@/components/loading-ui"
@@ -54,7 +54,7 @@ export default function ContactPageClient() {
   const [data, setData] = useState<ContactData | null>(null)
   const [isChangingLanguage, setIsChangingLanguage] = useState(false)
   const [initialLoad, setInitialLoad] = useState(true)
-  const { language } = useLanguage()
+  const language = useLang()
   const { controls, isClient } = usePageAnimations()
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [formData, setFormData] = useState({

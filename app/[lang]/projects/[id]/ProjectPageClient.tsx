@@ -10,7 +10,7 @@ import { ArrowLeft, ArrowRight, Github, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePageAnimations } from "@/hooks/use-page-animations"
-import { useLanguage } from "@/contexts/language-context"
+import { useLang } from "@/hooks/use-lang"
 import { client } from "@/sanity/lib/client"
 import { singleProjectQuery } from "@/sanity/queries/projects"
 import { footerQuery } from "@/sanity/queries/footer"
@@ -99,7 +99,7 @@ export default function ProjectPageClient({ id }: ProjectPageClientProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [isChangingLanguage, setIsChangingLanguage] = useState(false)
   const [initialLoad, setInitialLoad] = useState(true)
-  const { language } = useLanguage()
+  const language = useLang()
   const { controls, isClient } = usePageAnimations()
 
   useEffect(() => {

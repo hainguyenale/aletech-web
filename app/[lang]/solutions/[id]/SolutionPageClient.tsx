@@ -8,7 +8,7 @@ import Link from "next/link"
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import LoadingUI from "@/components/loading-ui"
-import { useLanguage } from "@/contexts/language-context"
+import { useLang } from "@/hooks/use-lang"
 import { client } from "@/sanity/lib/client"
 import { solutionQuery } from "@/sanity/queries/solutions"
 import Navbar from "@/components/navbar"
@@ -42,7 +42,7 @@ export default function SolutionPageClient({ id }: { id: string }) {
     const [isLoading, setIsLoading] = useState(true)
     const [isChangingLanguage, setIsChangingLanguage] = useState(false)
     const [initialLoad, setInitialLoad] = useState(true)
-    const { language } = useLanguage()
+    const language = useLang()
     const controls = useAnimation()
     const [featuresRef, featuresInView] = useInView({
         triggerOnce: false,

@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   description: "Detailed information about Aletech's technology solutions.",
 }
 
-export default async function SolutionPage({ params }: { params: { id: string } }) {
-  return <SolutionPageClient id={params.id} />
-} 
+interface Props {
+  params: Promise<{ id: string; lang: string }>
+}
+
+export default async function SolutionPage({ params }: Props) {
+  const { id } = await params
+  return <SolutionPageClient id={id} />
+}

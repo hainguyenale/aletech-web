@@ -11,7 +11,7 @@ import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePageAnimations } from "@/hooks/use-page-animations"
 import LoadingUI from "@/components/loading-ui"
-import { useLanguage } from "@/contexts/language-context"
+import { useLang } from "@/hooks/use-lang"
 import { client } from "@/sanity/lib/client"
 import { projectPageQuery } from "@/sanity/queries/projects"
 import { footerQuery } from "@/sanity/queries/footer"
@@ -63,7 +63,7 @@ export default function ProjectsPageClient() {
   const [isLoading, setIsLoading] = useState(true)
   const [isChangingLanguage, setIsChangingLanguage] = useState(false)
   const [initialLoad, setInitialLoad] = useState(true)
-  const { language } = useLanguage()
+  const language = useLang()
   const [activeCategory, setActiveCategory] = useState("All")
   const [allCategories, setAllCategories] = useState<string[]>(["All"])
   const { controls, isClient } = usePageAnimations()

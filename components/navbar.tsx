@@ -7,9 +7,10 @@ import { Menu, X, ChevronDown, Globe } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import ThemeToggle from "@/components/theme-toggle"
-import { useLanguage } from "@/contexts/language-context"
+import { useLang } from "@/hooks/use-lang"
 import { navbarQuery } from "@/sanity/queries/navbar"
 import { client } from "@/sanity/lib/client"
+import type { Locale } from "@/lib/i18n"
 
 interface NavbarData {
   navLinks: Array<{
@@ -32,23 +33,32 @@ export default function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
   const languageDropdownRef = useRef<HTMLDivElement>(null)
-  const { language, setLanguage } = useLanguage()
-
-  console.log('Navbar current language:', language)
+  const language = useLang()
 
   const languages = [
     { code: 'en', name: 'English' },
     { code: 'vi', name: 'Tiếng Việt' },
   ]
 
-  const handleLanguageChange = (langCode: 'en' | 'vi') => {
-    console.log('Navbar language change requested:', langCode)
+  const handleLanguageChange = (langCode: Locale) => {
     setIsLanguageDropdownOpen(false)
-    setLanguage(langCode)
+    // Navigate to the same page with new language prefix
+    const pathWithoutLang = pathname.replace(/^\/(en|vi)/, '')
+    router.push(`/${langCode}${pathWithoutLang || '/'}`)
+  }
+
+  // Helper to get localized href for nav links
+  const getLocalizedHref = (href: string) => {
+    // If href already starts with /en or /vi, return as is
+    if (href.startsWith('/en') || href.startsWith('/vi')) {
+      return href
+    }
+    return `/${language}${href}`
   }
 
   const isActive = (path: string) => {
-    return pathname === path
+    const localizedPath = getLocalizedHref(path)
+    return pathname === localizedPath || pathname === path
   }
 
   useEffect(() => {
@@ -68,7 +78,7 @@ export default function Navbar() {
 
     window.addEventListener("scroll", handleScroll)
     document.addEventListener("mousedown", handleClickOutside)
-    
+
     return () => {
       window.removeEventListener("scroll", handleScroll)
       document.removeEventListener("mousedown", handleClickOutside)
@@ -95,10 +105,9 @@ export default function Navbar() {
       try {
         if (!initialLoad) {
           setIsChangingLanguage(true)
-          // Add artificial delay for smoother transition
           await new Promise(resolve => setTimeout(resolve, 400))
         }
-        
+
         const result = await client.fetch<NavbarData>(navbarQuery, { language })
         if (!result) {
           throw new Error(`No navbar data found for language: ${language}`)
@@ -149,7 +158,7 @@ export default function Navbar() {
         transition={{ duration: 0.5, ease: "easeInOut" }}
       >
         <div className="container flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href={`/${language}`} className="flex items-center space-x-2">
             <Image src="/logos/aletech.svg" alt="Aletech Logo" width={40} height={40} className="h-10 w-auto" />
             <span className="text-xl font-bold text-primary">ALETECH</span>
           </Link>
@@ -171,7 +180,7 @@ export default function Navbar() {
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href={`/${language}`} className="flex items-center space-x-2">
           <motion.div whileHover={{ rotate: 10 }} transition={{ duration: 0.3 }}>
             <Image src="/logos/aletech.svg" alt="Aletech Logo" width={40} height={40} className="h-10 w-auto" />
           </motion.div>
@@ -196,7 +205,7 @@ export default function Navbar() {
               transition={{ duration: 0.3, delay: 0.1 * (index + 1) }}
             >
               <Link
-                href={link.href}
+                href={getLocalizedHref(link.href)}
                 className={`text-sm font-medium transition-colors relative ${
                   isActive(link.href) ? "text-primary" : "hover:text-primary"
                 }`}
@@ -247,7 +256,7 @@ export default function Navbar() {
                         className={`w-full text-left px-4 py-2 text-sm transition-colors ${
                           language === lang.code ? "text-primary bg-primary/10" : "hover:bg-primary/10"
                         }`}
-                        onClick={() => handleLanguageChange(lang.code as 'en' | 'vi')}
+                        onClick={() => handleLanguageChange(lang.code as Locale)}
                       >
                         {lang.name}
                       </button>
@@ -291,7 +300,7 @@ export default function Navbar() {
                         className={`w-full text-left px-4 py-2 text-sm transition-colors ${
                           language === lang.code ? "text-primary bg-primary/10" : "hover:bg-primary/10"
                         }`}
-                        onClick={() => handleLanguageChange(lang.code as 'en' | 'vi')}
+                        onClick={() => handleLanguageChange(lang.code as Locale)}
                       >
                         {lang.name}
                       </button>
@@ -339,7 +348,7 @@ export default function Navbar() {
                     transition={{ duration: 0.3, delay: 0.05 * index }}
                   >
                     <Link
-                      href={link.href}
+                      href={getLocalizedHref(link.href)}
                       className={`text-sm font-medium transition-colors ${
                         isActive(link.href) ? "text-primary" : "hover:text-primary"
                       }`}
@@ -349,8 +358,6 @@ export default function Navbar() {
                     </Link>
                   </motion.div>
                 ))}
-                
-              
               </nav>
             </div>
           </motion.div>
@@ -359,4 +366,3 @@ export default function Navbar() {
     </motion.header>
   )
 }
-

@@ -12,14 +12,14 @@ import FadeIn from "@/components/animations/fade-in"
 import StaggerContainer from "@/components/animations/stagger-container"
 import StaggerItem from "@/components/animations/stagger-item"
 import { useState, useEffect } from "react"
-import { useLanguage } from "@/contexts/language-context"
+import { useLang } from "@/hooks/use-lang"
 import { client } from "@/sanity/lib/client"
 import { footerQuery } from "@/sanity/queries/footer"
 
 export default function NewsPageClient() {
   const [activeCategory, setActiveCategory] = useState("All")
   const [footerData, setFooterData] = useState<FooterData | null>(null)
-  const { language } = useLanguage()
+  const language = useLang()
 
   useEffect(() => {
     const fetchFooterData = async () => {

@@ -7,14 +7,14 @@ import { motion } from "framer-motion"
 import { usePageAnimations } from "@/hooks/use-page-animations"
 import { Shield, Lock, FileText, UserCheck, AlertCircle, Mail } from "lucide-react"
 import { useState, useEffect } from "react"
-import { useLanguage } from "@/contexts/language-context"
+import { useLang } from "@/hooks/use-lang"
 import { client } from "@/sanity/lib/client"
 import { footerQuery } from "@/sanity/queries/footer"
 
 export default function PrivacyPageClient() {
   const { controls, hasAnimated } = usePageAnimations()
   const [footerData, setFooterData] = useState<FooterData | null>(null)
-  const { language } = useLanguage()
+  const language = useLang()
 
   useEffect(() => {
     const fetchFooterData = async () => {

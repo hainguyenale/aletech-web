@@ -17,7 +17,7 @@ import { motion } from "framer-motion";
 import FadeIn from "@/components/animations/fade-in";
 import StaggerContainer from "@/components/animations/stagger-container";
 import StaggerItem from "@/components/animations/stagger-item";
-import { useLanguage } from "@/contexts/language-context";
+import { useLang } from "@/hooks/use-lang";
 import { client } from "@/sanity/lib/client";
 import { investorsPageQuery } from "@/sanity/queries/investors";
 import LoadingUI from "@/components/loading-ui";
@@ -127,7 +127,7 @@ export default function InvestorsPageClient() {
   const [footerData, setFooterData] = useState<FooterData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isChangingLanguage, setIsChangingLanguage] = useState(false);
-  const { language } = useLanguage();
+  const language = useLang();
   const { controls, isClient } = usePageAnimations();
   const [visibleReports, setVisibleReports] = useState(6);
 
