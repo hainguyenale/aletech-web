@@ -23,9 +23,11 @@ export function middleware(request: NextRequest) {
   )
 
   // Geo-blocking for investors (Vietnam only)
+  // Allow access if country header is missing (local dev, non-Vercel hosting)
   if (pathname.includes('/investors')) {
     const country = request.headers.get('x-vercel-ip-country')
-    if (country !== 'VN') {
+    // Only block if we definitively know it's NOT Vietnam
+    if (country && country !== 'VN') {
       const locale = pathnameHasLocale
         ? pathname.split('/')[1]
         : DEFAULT_LOCALE
