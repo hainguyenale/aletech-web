@@ -3,31 +3,20 @@
 import Navbar from "@/components/navbar"
 import Footer, { FooterData } from "@/components/footer"
 import PageHeader from "@/components/page-header"
-import { motion } from "framer-motion"
-import { usePageAnimations } from "@/hooks/use-page-animations"
+import { motion, useAnimation } from "framer-motion"
+import { useEffect } from "react"
 import { Shield, Lock, FileText, UserCheck, AlertCircle, Mail } from "lucide-react"
-import { useState, useEffect } from "react"
-import { useLang } from "@/hooks/use-lang"
-import { client } from "@/sanity/lib/client"
-import { footerQuery } from "@/sanity/queries/footer"
 
-export default function PrivacyPageClient() {
-  const { controls, hasAnimated } = usePageAnimations()
-  const [footerData, setFooterData] = useState<FooterData | null>(null)
-  const language = useLang()
+interface AnimatedPrivacyProps {
+  footerData: FooterData
+}
+
+export default function AnimatedPrivacy({ footerData }: AnimatedPrivacyProps) {
+  const controls = useAnimation()
 
   useEffect(() => {
-    const fetchFooterData = async () => {
-      try {
-        const footerResult = await client.fetch<FooterData>(footerQuery, { language })
-        setFooterData(footerResult)
-      } catch (error) {
-        console.error('Error fetching footer data:', error)
-      }
-    }
-
-    fetchFooterData()
-  }, [language])
+    controls.start("visible")
+  }, [controls])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -65,7 +54,7 @@ export default function PrivacyPageClient() {
           animate={controls}
           className="max-w-4xl mx-auto"
         >
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-card rounded-lg shadow-md p-8 mb-8 border border-border"
           >
@@ -81,7 +70,7 @@ export default function PrivacyPageClient() {
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-card rounded-lg shadow-md p-8 mb-8 border border-border"
           >
@@ -110,7 +99,7 @@ export default function PrivacyPageClient() {
             </ul>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-card rounded-lg shadow-md p-8 mb-8 border border-border"
           >
@@ -130,7 +119,7 @@ export default function PrivacyPageClient() {
             </ul>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-card rounded-lg shadow-md p-8 mb-8 border border-border"
           >
@@ -151,7 +140,7 @@ export default function PrivacyPageClient() {
             </ul>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-card rounded-lg shadow-md p-8 mb-8 border border-border"
           >
@@ -164,7 +153,7 @@ export default function PrivacyPageClient() {
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-card rounded-lg shadow-md p-8 mb-8 border border-border"
           >
@@ -183,7 +172,7 @@ export default function PrivacyPageClient() {
             </ul>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-card rounded-lg shadow-md p-8 mb-8 border border-border"
           >
@@ -196,7 +185,7 @@ export default function PrivacyPageClient() {
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-card rounded-lg shadow-md p-8 mb-8 border border-border"
           >
@@ -209,7 +198,7 @@ export default function PrivacyPageClient() {
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-card rounded-lg shadow-md p-8 border border-border"
           >
@@ -226,14 +215,14 @@ export default function PrivacyPageClient() {
                 <strong className="text-foreground">Address:</strong> Buon Ma Thuot, Vietnam
               </p>
               <p className="text-muted-foreground mt-2">
-                <strong className="text-foreground">Last Updated:</strong> {new Date().toLocaleDateString()}
+                <strong className="text-foreground">Last Updated:</strong> January 2025
               </p>
             </div>
           </motion.div>
         </motion.div>
       </section>
 
-      {footerData && <Footer data={footerData} />}
+      <Footer data={footerData} />
     </main>
   )
-} 
+}

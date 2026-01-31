@@ -11,28 +11,16 @@ import { motion } from "framer-motion"
 import FadeIn from "@/components/animations/fade-in"
 import StaggerContainer from "@/components/animations/stagger-container"
 import StaggerItem from "@/components/animations/stagger-item"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useLang } from "@/hooks/use-lang"
-import { client } from "@/sanity/lib/client"
-import { footerQuery } from "@/sanity/queries/footer"
 
-export default function NewsPageClient() {
+interface AnimatedNewsProps {
+  footerData: FooterData
+}
+
+export default function AnimatedNews({ footerData }: AnimatedNewsProps) {
   const [activeCategory, setActiveCategory] = useState("All")
-  const [footerData, setFooterData] = useState<FooterData | null>(null)
   const language = useLang()
-
-  useEffect(() => {
-    const fetchFooterData = async () => {
-      try {
-        const footerResult = await client.fetch<FooterData>(footerQuery, { language })
-        setFooterData(footerResult)
-      } catch (error) {
-        console.error('Error fetching footer data:', error)
-      }
-    }
-
-    fetchFooterData()
-  }, [language])
 
   const featuredNews = {
     id: "ai-partnership",
@@ -157,7 +145,7 @@ export default function NewsPageClient() {
       <section className="py-12 bg-background">
         <div className="container px-4 mx-auto">
           <FadeIn>
-            <Link href={`/news/${featuredNews.id}`} className="group">
+            <Link href={`/${language}/news/${featuredNews.id}`} className="group">
               <motion.div
                 className="bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden hover:border-primary/50 transition-all duration-300"
                 whileHover={{
@@ -250,7 +238,7 @@ export default function NewsPageClient() {
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredNews.map((news) => (
               <StaggerItem key={news.id}>
-                <Link href={`/news/${news.id}`} className="group block h-full">
+                <Link href={`/${language}/news/${news.id}`} className="group block h-full">
                   <motion.div
                     className="bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden hover:border-primary/50 transition-all duration-300 h-full flex flex-col"
                     whileHover={{
@@ -377,8 +365,7 @@ export default function NewsPageClient() {
         </div>
       </section>
 
-      {footerData && <Footer data={footerData} />}
+      <Footer data={footerData} />
     </main>
   )
 }
-

@@ -1,276 +1,58 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import { motion, useAnimation } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import { useParams } from "next/navigation"
-import Navbar from "@/components/navbar"
-import HeroSection from "@/components/hero-section"
-import ServicesSection from "@/components/services-section"
-import AboutSection from "@/components/about-section"
-import SolutionsSection from "@/components/solutions-section"
-import TestimonialsSection from "@/components/testimonials-section"
-import ContactSection from "@/components/contact-section"
-import Footer, { FooterData } from "@/components/footer"
-import LoadingUI from "@/components/loading-ui"
 import { client } from "@/sanity/lib/client"
 import { homeQuery } from "@/sanity/queries/home"
 import { footerQuery } from "@/sanity/queries/footer"
+import { metadataQuery } from "@/sanity/queries/metadata"
+import AnimatedHome from "./_components/animated-home"
+import type { Metadata } from "next"
 import type { Locale } from "@/lib/i18n"
+import type { HomeData } from "@/lib/types"
+import type { FooterData } from "@/components/footer"
 
-interface SanityImage {
-  asset: {
-    _ref: string
-    _type: string
-  }
-  _type: string
+export const revalidate = 3600 // ISR: 1 hour
+
+interface Props {
+  params: Promise<{ lang: Locale }>
 }
 
-interface HomeData {
-  hero: {
-    tagline: string
-    heading: {
-      text: string
-      highlightedText: string
-    }
-    thumbnailImage: SanityImage
-    videoUrl: string
-    description: string
-    primaryButton: {
-      text: string
-      link: string
-    }
-    secondaryButton: {
-      text: string
-      link: string
-    }
-    stats: Array<{
-      number: string
-      label: string
-    }>
-  }
-  services: {
-    title: string
-    description: string
-    services: Array<{
-      icon: string
-      title: string
-      description: string
-    }>
-  }
-  about: {
-    tagline: string
-    title: string
-    description: string
-    features: string[]
-    primaryButton: {
-      text: string
-      link: string
-    }
-  }
-  solutions: {
-    title: string
-    subtitle: string
-    solutionsList: Array<{
-      id: string
-      icon: string
-      label: string
-      title: string
-      description: string
-      features: string[]
-      image: {
-        url: string
-      }
-      link: string
-    }>
-  }
-  testimonials: {
-    title: string
-    description: string
-    testimonials: Array<{
-      quote: string
-      name: string
-      title: string
-    }>
-  }
-  contact: {
-    tagline: string
-    title: string
-    description: string
-    contactInfo: Array<{
-      type: string
-      title: string
-      value: string
-      additionalInfo?: string[]
-    }>
-  }
-}
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params
+  const meta = await client.fetch(metadataQuery, { language: lang })
+  const baseUrl = "https://aletech.com"
 
-export default function HomePage() {
-  const params = useParams()
-  const lang = (params.lang as Locale) || "en"
-
-  const [data, setData] = useState<HomeData | null>(null)
-  const [footerData, setFooterData] = useState<FooterData | null>(null)
-  const [isChangingLanguage, setIsChangingLanguage] = useState(false)
-  const [initialLoad, setInitialLoad] = useState(true)
-
-  const servicesControls = useAnimation()
-  const aboutControls = useAnimation()
-  const solutionsControls = useAnimation()
-  const testimonialsControls = useAnimation()
-  const contactControls = useAnimation()
-
-  const [servicesRef, servicesInView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  })
-  const [aboutRef, aboutInView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  })
-  const [solutionsRef, solutionsInView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  })
-  const [testimonialsRef, testimonialsInView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  })
-  const [contactRef, contactInView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  })
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!initialLoad) {
-          setIsChangingLanguage(true)
-          await new Promise((resolve) => setTimeout(resolve, 400))
-        }
-
-        const result = await client.fetch<HomeData>(homeQuery, { language: lang })
-        const footerResult = await client.fetch<FooterData>(footerQuery, {
-          language: lang,
-        })
-
-        setData(result)
-        setFooterData(footerResult)
-      } catch (error) {
-        console.error("Error fetching data:", error)
-      } finally {
-        setIsChangingLanguage(false)
-        setInitialLoad(false)
-      }
-    }
-
-    fetchData()
-  }, [lang, initialLoad])
-
-  useEffect(() => {
-    if (servicesInView) servicesControls.start("visible")
-    if (aboutInView) aboutControls.start("visible")
-    if (solutionsInView) solutionsControls.start("visible")
-    if (testimonialsInView) testimonialsControls.start("visible")
-    if (contactInView) contactControls.start("visible")
-  }, [
-    servicesInView,
-    servicesControls,
-    aboutInView,
-    aboutControls,
-    solutionsInView,
-    solutionsControls,
-    testimonialsInView,
-    testimonialsControls,
-    contactInView,
-    contactControls,
-  ])
-
-  const sectionVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1],
-        staggerChildren: 0.2,
+  return {
+    title: meta?.title || "Aletech - Problem-Centered Technology Solutions",
+    description:
+      meta?.description ||
+      "Aletech is your committed outsourcing partner, delivering tailored end-to-end solutions.",
+    openGraph: {
+      title: meta?.title || "Aletech - Problem-Centered Technology Solutions",
+      description: meta?.description,
+      images: [{ url: meta?.thumbnailUrl || "/og-image.jpg" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta?.title || "Aletech - Problem-Centered Technology Solutions",
+      description: meta?.description,
+      images: [meta?.thumbnailUrl || "/og-image.jpg"],
+    },
+    alternates: {
+      canonical: `${baseUrl}/${lang}`,
+      languages: {
+        en: `${baseUrl}/en`,
+        vi: `${baseUrl}/vi`,
+        "x-default": `${baseUrl}/en`,
       },
     },
   }
+}
 
-  if (!data) {
-    return null
-  }
+export default async function HomePage({ params }: Props) {
+  const { lang } = await params
 
-  return (
-    <>
-      <LoadingUI isVisible={isChangingLanguage} />
+  const [homeData, footerData] = await Promise.all([
+    client.fetch<HomeData>(homeQuery, { language: lang }),
+    client.fetch<FooterData>(footerQuery, { language: lang }),
+  ])
 
-      {!isChangingLanguage && (
-        <main className="min-h-screen bg-background text-foreground">
-          <Navbar />
-
-          <HeroSection data={data.hero} />
-
-          <motion.div
-            ref={servicesRef}
-            initial="hidden"
-            animate={servicesControls}
-            variants={sectionVariants}
-          >
-            <ServicesSection data={data.services} />
-          </motion.div>
-
-          <motion.div
-            ref={aboutRef}
-            initial="hidden"
-            animate={aboutControls}
-            variants={sectionVariants}
-          >
-            <AboutSection data={data.about} />
-          </motion.div>
-
-          <motion.div
-            ref={solutionsRef}
-            initial="hidden"
-            animate={solutionsControls}
-            variants={sectionVariants}
-          >
-            <SolutionsSection
-              data={{
-                title: data.solutions.title,
-                description: data.solutions.subtitle,
-                solutions: data.solutions.solutionsList.map((solution) => ({
-                  ...solution,
-                  image: solution.image.url,
-                })),
-              }}
-            />
-          </motion.div>
-
-          <motion.div
-            ref={testimonialsRef}
-            initial="hidden"
-            animate={testimonialsControls}
-            variants={sectionVariants}
-          >
-            <TestimonialsSection data={data.testimonials} />
-          </motion.div>
-
-          <motion.div
-            ref={contactRef}
-            initial="hidden"
-            animate={contactControls}
-            variants={sectionVariants}
-          >
-            <ContactSection data={data.contact} />
-          </motion.div>
-
-          {footerData && <Footer data={footerData} />}
-        </main>
-      )}
-    </>
-  )
+  return <AnimatedHome data={homeData} footerData={footerData} lang={lang} />
 }
