@@ -2,6 +2,7 @@ import { client } from "@/sanity/lib/client"
 import { singleProjectQuery } from "@/sanity/queries/projects"
 import { footerQuery } from "@/sanity/queries/footer"
 import AnimatedProject from "./_components/animated-project"
+import { WebPageJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
 import type { Metadata } from "next"
 import type { Locale } from "@/lib/i18n"
 import type { SingleProjectData } from "@/lib/types"
@@ -57,5 +58,23 @@ export default async function ProjectPage({ params }: Props) {
     client.fetch<FooterData>(footerQuery, { language: lang }),
   ])
 
-  return <AnimatedProject data={projectData} footerData={footerData} />
+  const baseUrl = "https://aletech.com"
+
+  return (
+    <>
+      <WebPageJsonLd
+        name={`${projectData.project?.title || 'Project'} | Aletech`}
+        description={projectData.project?.description || ''}
+        url={`${baseUrl}/${lang}/projects/${id}`}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: `${baseUrl}/${lang}` },
+          { name: 'Projects', url: `${baseUrl}/${lang}/projects` },
+          { name: projectData.project?.title || 'Project', url: `${baseUrl}/${lang}/projects/${id}` },
+        ]}
+      />
+      <AnimatedProject data={projectData} footerData={footerData} />
+    </>
+  )
 }

@@ -2,6 +2,7 @@ import { client } from "@/sanity/lib/client"
 import { solutionQuery } from "@/sanity/queries/solutions"
 import { footerQuery } from "@/sanity/queries/footer"
 import AnimatedSolution from "./_components/animated-solution"
+import { WebPageJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
 import type { Metadata } from "next"
 import type { Locale } from "@/lib/i18n"
 import type { Solution } from "@/lib/types"
@@ -57,5 +58,23 @@ export default async function SolutionPage({ params }: Props) {
     client.fetch<FooterData>(footerQuery, { language: lang }),
   ])
 
-  return <AnimatedSolution data={solutionData} footerData={footerData} />
+  const baseUrl = "https://aletech.com"
+
+  return (
+    <>
+      <WebPageJsonLd
+        name={`${solutionData?.title || 'Solution'} | Aletech`}
+        description={solutionData?.description || ''}
+        url={`${baseUrl}/${lang}/solutions/${id}`}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: `${baseUrl}/${lang}` },
+          { name: 'Solutions', url: `${baseUrl}/${lang}/solutions` },
+          { name: solutionData?.title || 'Solution', url: `${baseUrl}/${lang}/solutions/${id}` },
+        ]}
+      />
+      <AnimatedSolution data={solutionData} footerData={footerData} />
+    </>
+  )
 }

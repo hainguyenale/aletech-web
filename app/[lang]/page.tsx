@@ -3,6 +3,7 @@ import { homeQuery } from "@/sanity/queries/home"
 import { footerQuery } from "@/sanity/queries/footer"
 import { metadataQuery } from "@/sanity/queries/metadata"
 import AnimatedHome from "./_components/animated-home"
+import { WebPageJsonLd } from "@/components/json-ld"
 import type { Metadata } from "next"
 import type { Locale } from "@/lib/i18n"
 import type { HomeData } from "@/lib/types"
@@ -54,5 +55,16 @@ export default async function HomePage({ params }: Props) {
     client.fetch<FooterData>(footerQuery, { language: lang }),
   ])
 
-  return <AnimatedHome data={homeData} footerData={footerData} lang={lang} />
+  const baseUrl = "https://aletech.com"
+
+  return (
+    <>
+      <WebPageJsonLd
+        name="Aletech - Problem-Centered Technology Solutions"
+        description="Tailored end-to-end solutions for unique challenges."
+        url={`${baseUrl}/${lang}`}
+      />
+      <AnimatedHome data={homeData} footerData={footerData} lang={lang} />
+    </>
+  )
 }

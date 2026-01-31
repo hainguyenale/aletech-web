@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, isValidLocale } from '@/lib/i18n'
+import { OrganizationJsonLd } from '@/components/json-ld'
 
 interface Props {
   children: React.ReactNode
@@ -34,5 +35,10 @@ export default async function LangLayout({ children, params }: Props) {
     notFound()
   }
 
-  return children
+  return (
+    <>
+      <OrganizationJsonLd />
+      {children}
+    </>
+  )
 }
