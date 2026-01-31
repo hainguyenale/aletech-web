@@ -1,10 +1,11 @@
+import { notFound } from "next/navigation"
 import { client } from "@/sanity/lib/client"
 import { singleProjectQuery } from "@/sanity/queries/projects"
 import { footerQuery } from "@/sanity/queries/footer"
 import AnimatedProject from "./_components/animated-project"
 import { WebPageJsonLd, BreadcrumbJsonLd } from "@/components/json-ld"
 import type { Metadata } from "next"
-import type { Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import type { SingleProjectData } from "@/lib/types"
 import type { FooterData } from "@/components/footer"
 
@@ -12,6 +13,21 @@ export const revalidate = 3600 // ISR: 1 hour
 
 interface Props {
   params: Promise<{ id: string; lang: Locale }>
+}
+
+export async function generateStaticParams() {
+  const projects = await client.fetch<{ id: string }[]>(
+    `*[_type == "project" && !(_id in path("drafts.**"))]{ id }`
+  )
+
+  if (!projects?.length) return []
+
+  return SUPPORTED_LOCALES.flatMap((lang) =>
+    projects.map((project) => ({
+      lang,
+      id: project.id,
+    }))
+  )
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -58,20 +74,24 @@ export default async function ProjectPage({ params }: Props) {
     client.fetch<FooterData>(footerQuery, { language: lang }),
   ])
 
+  if (!projectData?.project) {
+    notFound()
+  }
+
   const baseUrl = "https://aletech.com"
 
   return (
     <>
       <WebPageJsonLd
-        name={`${projectData.project?.title || 'Project'} | Aletech`}
-        description={projectData.project?.description || ''}
+        name={`${projectData.project.title} | Aletech`}
+        description={projectData.project.description}
         url={`${baseUrl}/${lang}/projects/${id}`}
       />
       <BreadcrumbJsonLd
         items={[
           { name: 'Home', url: `${baseUrl}/${lang}` },
           { name: 'Projects', url: `${baseUrl}/${lang}/projects` },
-          { name: projectData.project?.title || 'Project', url: `${baseUrl}/${lang}/projects/${id}` },
+          { name: projectData.project.title, url: `${baseUrl}/${lang}/projects/${id}` },
         ]}
       />
       <AnimatedProject data={projectData} footerData={footerData} />
