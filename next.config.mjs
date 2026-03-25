@@ -27,6 +27,22 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  async redirects() {
+    return [
+      // Static page redirects (old URLs without locale)
+      { source: '/about', destination: '/en/about', permanent: true },
+      { source: '/contact', destination: '/en/contact', permanent: true },
+      { source: '/projects', destination: '/en/projects', permanent: true },
+      { source: '/solutions', destination: '/en/solutions', permanent: true },
+      { source: '/investors', destination: '/en/investors', permanent: true },
+      { source: '/news', destination: '/en/news', permanent: true },
+      { source: '/privacy', destination: '/en/privacy', permanent: true },
+      { source: '/terms', destination: '/en/terms', permanent: true },
+      // Dynamic route redirects
+      { source: '/projects/:id', destination: '/en/projects/:id', permanent: true },
+      { source: '/solutions/:id', destination: '/en/solutions/:id', permanent: true },
+    ]
+  },
 }
 
 if (userConfig) {
