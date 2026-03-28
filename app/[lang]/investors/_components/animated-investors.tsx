@@ -33,8 +33,8 @@ export default function AnimatedInvestors({ data, footerData }: AnimatedInvestor
         <NewsDisclosures data={data.newsDisclosures} />
         <InvestmentRoadmap data={data.investmentRoadmap} />
         <FinancialReportsTabs data={data.financialReports} />
-        <IRContact data={data.contactIR} />
       </div>
+      <IRContact data={data.contactIR} />
       <Footer data={footerData} />
     </main>
   )

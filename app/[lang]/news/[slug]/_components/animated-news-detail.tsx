@@ -46,7 +46,19 @@ export default function AnimatedNewsDetail({ article, allArticles, footerData }:
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <PageHeader title={article.title} />
+      <section className="pt-32 pb-12 bg-background relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background">
+          <div className="absolute inset-0 opacity-20">
+            <div className="h-full w-full grid-pattern" />
+          </div>
+        </div>
+        <div className="container relative z-10 mx-auto px-4 max-w-[800px]">
+          <FadeIn direction="up">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">{article.title}</h1>
+            <div className="h-1 w-20 bg-primary" />
+          </FadeIn>
+        </div>
+      </section>
 
       <article className="py-12">
         <div className="max-w-[800px] mx-auto px-4">
