@@ -1,8 +1,8 @@
 import { client } from "@/sanity/lib/client"
-import { investorsPageQuery } from "@/sanity/queries/investors"
 import { footerQuery } from "@/sanity/queries/footer"
 import { metadataQuery } from "@/sanity/queries/metadata"
-import AnimatedInvestors, { InvestorsData } from "./_components/animated-investors"
+import AnimatedInvestors from "./_components/animated-investors"
+import { investorsMockData } from "@/mocks/investors"
 import type { Metadata } from "next"
 import type { Locale } from "@/lib/i18n"
 import type { FooterData } from "@/components/footer"
@@ -48,10 +48,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function InvestorsPage({ params }: Props) {
   const { lang } = await params
 
-  const [investorsData, footerData] = await Promise.all([
-    client.fetch<InvestorsData>(investorsPageQuery, { language: lang }),
-    client.fetch<FooterData>(footerQuery, { language: lang }),
-  ])
+  // Mock data for demo - swap to Sanity fetch when ready
+  const investorsData = investorsMockData[lang] || investorsMockData["en"]
+
+  const footerData = await client.fetch<FooterData>(footerQuery, { language: lang })
 
   return <AnimatedInvestors data={investorsData} footerData={footerData} />
 }

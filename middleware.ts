@@ -22,18 +22,6 @@ export function middleware(request: NextRequest) {
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   )
 
-  // Geo-blocking for investors (Vietnam only)
-  // Block if country is not VN or cannot be detected
-  if (pathname.includes('/investors')) {
-    const country = request.headers.get('x-vercel-ip-country')
-    if (country !== 'VN') {
-      const locale = pathnameHasLocale
-        ? pathname.split('/')[1]
-        : DEFAULT_LOCALE
-      return NextResponse.redirect(new URL(`/${locale}/404`, request.url))
-    }
-  }
-
   // Redirect to default locale if no locale in path
   if (!pathnameHasLocale) {
     const url = request.nextUrl.clone()

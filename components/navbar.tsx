@@ -25,7 +25,6 @@ export default function Navbar() {
   const [navbarData, setNavbarData] = useState<NavbarData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
-  const [userCountry, setUserCountry] = useState<string | null>(null)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false)
@@ -85,19 +84,6 @@ export default function Navbar() {
     }
   }, [])
 
-  // Fetch user's country on component mount
-  useEffect(() => {
-    const fetchCountry = async () => {
-      try {
-        const response = await fetch('/api/country')
-        const data = await response.json()
-        setUserCountry(data.country)
-      } catch (error) {
-        console.error('Error fetching country:', error)
-      }
-    }
-    fetchCountry()
-  }, [])
 
   // Data fetching effect
   useEffect(() => {
@@ -196,7 +182,6 @@ export default function Navbar() {
 
         <nav className="hidden md:flex items-center space-x-6">
           {navbarData.navLinks
-            .filter(link => link.href !== '/investors' || userCountry === 'VN')
             .map((link, index) => (
             <motion.div
               key={link.href}
@@ -339,7 +324,7 @@ export default function Navbar() {
             <div className="container py-4 space-y-4">
               <nav className="flex flex-col space-y-4">
                 {navbarData.navLinks
-                  .filter(link => link.href !== '/investors' || userCountry === 'VN')
+                  .filter(link => link.href !== '_disabled_')
                   .map((link, index) => (
                   <motion.div
                     key={link.href}

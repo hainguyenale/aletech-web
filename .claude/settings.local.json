@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(curl -s \"https://jspa4h9r.api.sanity.io/v2025-04-22/data/query/production?query=*%5B_type%20%3D%3D%20%22about%22%5D%5B0%5D.members.teamMembers%5B%5D%7Bname%2Cposition%2C%22imageUrl%22%3Aimage.asset-%3Eurl%7D\")",
+      "Bash(curl -s https://jspa4h9r.api.sanity.io/v2025-04-22/data/query/production?query=*%5B_type%20%3D%3D%20%22about%22%5D%5B0%5D.members.teamMembers%5B%5D%7Bname%2Cposition%2C%22imageUrl%22%3Aimage.asset-%3Eurl%7D)",
+      "Bash(start \"\" \"plans/visuals/shareholder-structure-options.html\")",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(lsof -ti:3000)",
+      "Bash(xargs kill:*)",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_OwningProcess -Force }; Write-Host ''port 3000 freed''\")",
+      "Bash(cmd //c \"for /f \"\"tokens=5\"\" %a in \\(''netstat -ano ^| findstr :3000 ^| findstr LISTENING''\\) do taskkill /F /PID %a\")",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /F /PID 37096)",
+      "Bash(kill -9 37096)",
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''d:\\\\ale-projects\\\\aletech-web\\\\.next'' -ErrorAction SilentlyContinue; Write-Host ''done''\")",
+      "Bash(xargs ls:*)"
+    ]
+  }
+}
